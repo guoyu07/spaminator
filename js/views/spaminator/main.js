@@ -3,7 +3,7 @@ define([
     'underscore',
     'backbone',
     'text!templates/spaminator/welcome.html',
-    'views/template/main'
+    'template/view/main'
 ], function($, _, Backbone, WelcomeTemplate, TemplateView) {
     var MainView = Backbone.View.extend({
         el: $('#spaminator'),
@@ -23,8 +23,10 @@ define([
             var templateView = new TemplateView({el: templateHolder});
             templateView.render();
 
+            $('html,body').css('scrollTop', 0);
+
             $('html,body').animate({
-                scrollTop: templateHolder.offset().top,
+                scrollTop: templateHolder.offset().top - $('#head-logo').outerHeight(true),
             }, 1000);
         },
     });
