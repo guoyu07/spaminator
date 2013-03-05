@@ -21,7 +21,7 @@ require.config({
 });
 
 require([
-    'spaminator',
+    'spaminator/spaminator',
 ], function(Spaminator) {
     Spaminator.initialize();
 });

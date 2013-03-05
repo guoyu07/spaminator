@@ -3,13 +3,11 @@ define([
     'underscore',
     'backbone',
     'bootstrap',
-    'router',
-], function($, _, Backbone, Bootstrap, Router){
+], function($, _, Backbone, Bootstrap){
     var initialize = function() {
         $('#spaminator').css({
             'margin-bottom': $('#footer').outerHeight(true),
         });
-        Router.initialize();
     }
 
     return {
