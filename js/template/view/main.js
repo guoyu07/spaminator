@@ -2,39 +2,60 @@ define([
     'jquery',
     'underscore',
     'backbone',
+    'template/collection/templatelist',
+    'template/model/item',
+    'template/view/item',
+    'template/view/editor',
     'text!template/template/layout.html',
-    'text!template/template/loading.html'
-], function($, _, Backbone, layoutTemplate, loadingTemplate, listItemTemplate, editorTemplate) {
+    'text!template/template/loading.html',
+], function($, _, Backbone, TemplateList, TemplateItem, ListItemView, EditorView, layoutTemplate, loadingTemplate) {
     var TemplateView = Backbone.View.extend({
-        el: $('.container'),
+        initialize: function() {
+            this.layout  = _.template(layoutTemplate);
+            this.loading = _.template(loadingTemplate);
+
+            this.collection = new TemplateList();
+
+            this.collection.on('add', this.addOne, this);
+            this.collection.on('reset', this.addAll, this);
+        },
         render: function() {
-            var compiledTemplate = _.template(layoutTemplate, {});
-            this.$el.append(compiledTemplate);
-            $this = this;
+            this.$el.html(this.layout({}));
 
-            var loading = _.template(loadingTemplate, {title: 'Templates'});
-            $listLoading = $(loading);
-            this.$el.find('#template-list').append($listLoading);
+            $('#template-list', this.$el).html(this.loading({title: 'templates'}));
 
-            var listItem = _.template(listItemTemplate);
-
-            $.ajax('/spaminator/data/template-list.json', {
-                complete: function(jqXHR, textStatus) {
-                    $listLoading.remove();
-                },
-                success: function(data, textStatus, jqXHR) {
-                    for(resultKey in data) {
-                        console.log(data[resultKey]);
-                        console.log(listItem(data[resultKey]));
-                        $this.$el.find('#template-list').append(listItem(data[resultKey]));
-                    }
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log(textStatus);
-                    console.log(errorThrown);
-                    $listLoading.parent().replaceWith('An error occurred getting template list');
-                },
+            this.collection.fetch();
+        },
+        addOne: function(model) {
+            var view = new ListItemView({
+                model: model,
             });
+            view.on('select', this.select, this);
+            $('#template-list', this.$el).append(view.render().el);
+        },
+        addAll: function() {
+            $('#template-list', this.$el).empty();
+            var newTemplate = new TemplateItem({
+                'active':   true,
+                'title':    '<strong>New Template...</strong>',
+                'modified': 'Never',
+                'content':  '',
+                'blank':    true,
+            });
+            this.addOne(newTemplate);
+            this.collection.each(this.addOne, this);
+            this.select(newTemplate);
+        },
+        select: function(model) {
+            if(this.selected) this.selected.set('active', false);
+            this.selected = model;
+            
+            if(this.edtiorView) this.editorView.remove();
+            this.editorView = new EditorView({
+                model: model,
+                el: $('#template-view', this.$el)
+            });
+            this.editorView.render();
         },
     });
 

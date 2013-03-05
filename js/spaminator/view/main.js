@@ -2,32 +2,32 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!templates/spaminator/welcome.html',
+    'text!spaminator/template/layout.html',
+    'text!spaminator/template/welcome.html',
     'template/view/main'
-], function($, _, Backbone, WelcomeTemplate, TemplateView) {
+], function($, _, Backbone, LayoutTemplate, WelcomeTemplate, TemplateView) {
     var MainView = Backbone.View.extend({
         el: $('#spaminator'),
 
         events: {
-            'click #get-started': 'showTemplate',
+            'click #get-started': 'showTemplateView',
+        },
+
+        initialize: function() {
+            this.layoutTemplate  = _.template(LayoutTemplate);
+            this.welcomeTemplate = _.template(WelcomeTemplate);
         },
         
         render: function() {
-            var welcomeRendered = _.template(WelcomeTemplate, {});
-            this.$el.append(welcomeRendered);
+            this.$el.html(this.layoutTemplate({}));
+            $('#welcome', this.$el).html(this.welcomeTemplate({}));
         },
 
-        showTemplate: function() {
-            var templateHolder = $('<div id="templateView">');
-            this.$el.append(templateHolder);
-            var templateView = new TemplateView({el: templateHolder});
-            templateView.render();
+        showTemplateView: function() {
+            if(this.templateView) return;
 
-            $('html,body').css('scrollTop', 0);
-
-            $('html,body').animate({
-                scrollTop: templateHolder.offset().top - $('#head-logo').outerHeight(true),
-            }, 1000);
+            this.templateView = new TemplateView({el: $('#template', this.$el)});
+            this.templateView.render();
         },
     });
 

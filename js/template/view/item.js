@@ -5,8 +5,9 @@ define([
     'template/model/item',
     'text!template/template/list-item.html',
 ], function($, _, Backbone, TemplateItem, ListItemTemplate) {
-    var ListItem = Backbone.View.extend({
+    var ListItemView = Backbone.View.extend({
         template: _.template(ListItemTemplate),
+        tagName: 'li',
         events: {
             'click': 'select',
         },
@@ -16,12 +17,16 @@ define([
         },
         render: function() {
             this.$el.html(this.template(this.model.toJSON()));
+            if(this.model.get('active')) this.$el.addClass('active');
+            else this.$el.removeClass('active');
             return this;
         },
         select: function(e) {
-            console.log('Selected: ' + this.model.name);
+            e.preventDefault();
+            this.model.set('active', true);
+            this.trigger('select', this.model);
         },
     });
 
-    return ListItem;
+    return ListItemView;
 });

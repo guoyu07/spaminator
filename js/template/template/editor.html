@@ -1,12 +1,18 @@
 <html>
   <body>
-    <div class="btn-toolbar">
-      <div class="btn-group">
-        <a class="btn" href="#"><i class="icon-bold"></i></a>
-        <a class="btn" href="#"><i class="icon-italic"></i></a>
-        <a class="btn" href="#"><i class="icon-globe"></i></a>
+    <form>
+      <div class="input-append">
+        <input class="span4" id="template-title" type="text" placeholder="Unnamed" value="<%=title%>">
+        <span class="add-on">Template Name</span>
       </div>
-    </div>
-    <textarea class="input-block-level" rows="25" placeholder="Begin typing here"></textarea>
+      <div class="btn-toolbar">
+        <div class="btn-group">
+          <a class="btn" href="#"><i class="icon-bold"></i></a>
+          <a class="btn" href="#"><i class="icon-italic"></i></a>
+          <a class="btn" href="#"><i class="icon-globe"></i></a>
+        </div>
+      </div>
+      <textarea class="input-block-level" rows="25" placeholder="Begin typing here"><%=content%></textarea>
+  </form>
   </body>
 </html>

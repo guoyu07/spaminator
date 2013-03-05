@@ -6,7 +6,13 @@ define([
 ], function($, _, Backbone, TemplateItem) {
     var TemplateList = Backbone.Collection.extend({
         model: TemplateItem,
-        localStorage: new Backbone.LocalStorage("template-list"),
+        url: 'data/index.php/template-list.json',
+        parse: function(response) {
+            _.each(response, function(herp) {
+                herp.active = false;
+            });
+            return response;
+        }
     });
 
     return TemplateList;
