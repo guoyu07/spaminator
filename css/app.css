@@ -16,6 +16,10 @@
     margin-top: 8em;
 }
 
+.template-item-actions {
+    line-height: 3em;
+}
+
 #footer {
     text-align: center;
     position: fixed;

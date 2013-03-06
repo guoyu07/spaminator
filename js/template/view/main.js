@@ -37,6 +37,9 @@ define([
             });
             view.on('select', this.select, this);
             $('#template-list', this.$el).prepend(view.render().el);
+            if(model.isNew()) {
+                this.select(view);
+            }
         },
         addAll: function() {
             $('#template-list', this.$el).empty();
@@ -44,7 +47,7 @@ define([
         },
         select: function(view) {
             // If editing, save changes
-            if(this.selected) {
+            if(this.selected && this.selected.model) {
                 if(this.selected.model.isDirty()) {
                     this.selected.model.save();
                 }
@@ -65,7 +68,6 @@ define([
             if(e) e.preventDefault();
             var tpl = new TemplateItem();
             this.collection.add(tpl);
-            this.select(tpl);
             this.editTemplate();
         },
         editTemplate: function(e) {

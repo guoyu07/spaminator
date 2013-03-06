@@ -51,6 +51,9 @@ if($parts[0] == 'template-list') {
             $data[$id] = $client;
 
             doNoContent();
+        case 'DELETE':
+            unset($data[$id]);
+            doNoContent();
         default:
             do405($method);
         }

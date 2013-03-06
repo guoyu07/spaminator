@@ -10,6 +10,7 @@ define([
         tagName: 'li',
         events: {
             'click': 'select',
+            'click .template-delete': 'delete',
         },
         initialize: function() {
             this.listenTo(this.model, 'change',  this.render);
@@ -24,6 +25,10 @@ define([
                 $('.template-unsaved', this.$el).hide();
             }
             return this;
+        },
+        delete: function(e) {
+            if(e) { e.preventDefault(); e.stopPropagation(); }
+            this.model.destroy();
         },
         select: function(e) {
             if(e) e.preventDefault();
