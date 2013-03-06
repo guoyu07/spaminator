@@ -2,17 +2,12 @@ define([
     'jquery',
     'underscore',
     'backbone',
+    'template/config',
     'template/model/item',
-], function($, _, Backbone, TemplateItem) {
+], function($, _, Backbone, Config, TemplateItem) {
     var TemplateList = Backbone.Collection.extend({
         model: TemplateItem,
-        url: 'data/index.php/template-list.json',
-        parse: function(response) {
-            _.each(response, function(herp) {
-                herp.active = false;
-            });
-            return response;
-        }
+        url: Config.templateUri,
     });
 
     return TemplateList;

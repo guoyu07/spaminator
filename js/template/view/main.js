@@ -42,32 +42,28 @@ define([
             $('#template-list', this.$el).empty();
             this.collection.each(this.addOne, this);
         },
-        select: function(model) {
+        select: function(view) {
             // If editing, save changes
-            if(this.mainView && this.mainView.hasChanged) {
-                if(this.mainView.hasChanged()) {
-                    this.mainView.saveChanges();
-                    this.selected.sync();
+            if(this.selected) {
+                if(this.selected.model.isDirty()) {
+                    this.selected.model.save();
                 }
             }
 
-            if(this.selected) this.selected.set('active', false);
-            this.selected = model;
-            this.selected.set('active', true);
+            if(this.selected) this.selected.setInactive();
+            this.selected = view;
+            this.selected.setActive();
 
             if(this.mainView) this.mainView.remove();
 
             this.mainView = new TemplateView({
-                model: model,
-//                el: $('#template-view', this.$el),
+                model: view.model,
             });
             $('#template-view', this.$el).html(this.mainView.render().$el);
         },
         newTemplate: function(e) {
             if(e) e.preventDefault();
-            var tpl = new TemplateItem({
-                saved: false
-            });
+            var tpl = new TemplateItem();
             this.collection.add(tpl);
             this.select(tpl);
             this.editTemplate();
@@ -78,7 +74,7 @@ define([
 
             this.mainView.remove();
             this.mainView = new EditorView({
-                model: this.selected,
+                model: this.selected.model,
             });
             $('#template-view', this.$el).html(this.mainView.render().$el);
         },
