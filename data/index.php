@@ -32,13 +32,14 @@ $data = array(
 
 $method = $_SERVER['REQUEST_METHOD'];
 
-if($parts[0] == 'debug') {
+switch($parts[0]) {
+case 'debug':
     var_dump($maxid);
     var_dump($data);
     quit();
-}
+case 'population':
 
-if($parts[0] == 'template-list') {
+case 'template-list':
     if(isset($parts[1])) {
         $id = $parts[1];
         if(!isset($data[$id])) do404($uri);
@@ -73,7 +74,8 @@ if($parts[0] == 'template-list') {
             do405($method);
         }
     }
-} else {
+    quit();
+default:
     do404($uri);
 }
 

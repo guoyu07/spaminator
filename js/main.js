@@ -1,13 +1,15 @@
 require.config({
     paths: {
-        jquery:     'libs/jquery/jquery',
-        underscore: 'libs/underscore/underscore',
-        backbone:   'libs/backbone/backbone',
-        bootstrap:  'libs/bootstrap/bootstrap',
-        require:    'libs/require/require',
-        text:       'libs/require/text',
-        rangy:      'libs/rangy/rangy-core',
-        ckeditor:   'libs/ckeditor/ckeditor',
+        'jquery':     'libs/jquery/jquery',
+        'jquery-ui':  'libs/jquery/jquery-ui',
+        'underscore': 'libs/underscore/underscore',
+        'backbone':   'libs/backbone/backbone',
+        'bootstrap':  'libs/bootstrap/bootstrap',
+        'require':    'libs/require/require',
+        'text':       'libs/require/text',
+        'rangy':      'libs/rangy/rangy-core',
+        'ckeditor':   'libs/ckeditor/ckeditor',
+        'libess':     'libs/ess/libess',
     },
 
     shim: {

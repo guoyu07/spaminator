@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <div class="row">
+      <div class="span12">
+        <h1>Step 2: Create a Population</h1>
+        <p class="lead">Import population members by Card Swipe, Banner ID, Username, or Email Address.</p>
+        <p class="text-center"><a class="btn btn-large btn-primary population-add">Add People to Population <i class="icon-plus icon-white"></i></a></p>
+        <table class="table table-striped table-bordered table-hover table-condensed">
+          <thead>
+            <tr>
+              <th></th>
+              <th>ID</th>
+              <th>LAST_NAME</th>
+              <th>FIRST_NAME</th>
+              <th>MIDDLE_NAME</th>
+              <th>PREFIX</th>
+              <th>SUFFIX</th>
+              <th>USERNAME</th>
+              <th>EMAIL</th>
+            </tr>
+          </thead>
+          <tbody id="population-member-list">
+          </tbody>
+          <tfoot>
+            <tr id="population-member-list-empty">
+              <td colspan="9"><p class="text-center"><strong>No one is in the population yet!</strong></p></td>
+            </tr>
+        </table>
+        <p class="text-center">
+          <a class="btn btn-large btn-primary population-add">Add People to Population <i class="icon-plus icon-white"></i></a>
+      </div>
+    </div>
+    <div id="population-entry-dialog">
+      <textarea id="population-entry-text" class="input-block-level" style="height: 375px;" placeholder="Paste in any list of card swipes, Banner IDs, usernames, or email addresses."></textarea>
+    </div>
+  </body>
+</html>
