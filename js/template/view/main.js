@@ -6,10 +6,11 @@ define([
     'template/model/item',
     'template/view/item',
     'template/view/editor',
+    'template/view/view',
     'text!template/template/layout.html',
     'text!template/template/loading.html',
-], function($, _, Backbone, TemplateList, TemplateItem, ListItemView, EditorView, layoutTemplate, loadingTemplate) {
-    var TemplateView = Backbone.View.extend({
+], function($, _, Backbone, TemplateList, TemplateItem, ListItemView, EditorView, TemplateView, layoutTemplate, loadingTemplate) {
+    var TemplateLayoutView = Backbone.View.extend({
         initialize: function() {
             this.layout  = _.template(layoutTemplate);
             this.loading = _.template(loadingTemplate);
@@ -18,6 +19,10 @@ define([
 
             this.collection.on('add', this.addOne, this);
             this.collection.on('reset', this.addAll, this);
+        },
+        events: {
+            'click #template-new': 'newTemplate',
+            'click #template-edit': 'editTemplate',
         },
         render: function() {
             this.$el.html(this.layout({}));
@@ -31,33 +36,53 @@ define([
                 model: model,
             });
             view.on('select', this.select, this);
-            $('#template-list', this.$el).append(view.render().el);
+            $('#template-list', this.$el).prepend(view.render().el);
         },
         addAll: function() {
             $('#template-list', this.$el).empty();
-            var newTemplate = new TemplateItem({
-                'active':   true,
-                'title':    '<strong>New Template...</strong>',
-                'modified': 'Never',
-                'content':  '',
-                'blank':    true,
-            });
-            this.addOne(newTemplate);
             this.collection.each(this.addOne, this);
-            this.select(newTemplate);
         },
         select: function(model) {
+            // If editing, save changes
+            if(this.mainView && this.mainView.hasChanged) {
+                if(this.mainView.hasChanged()) {
+                    this.mainView.saveChanges();
+                    this.selected.sync();
+                }
+            }
+
             if(this.selected) this.selected.set('active', false);
             this.selected = model;
-            
-            if(this.edtiorView) this.editorView.remove();
-            this.editorView = new EditorView({
+            this.selected.set('active', true);
+
+            if(this.mainView) this.mainView.remove();
+
+            this.mainView = new TemplateView({
                 model: model,
-                el: $('#template-view', this.$el)
+//                el: $('#template-view', this.$el),
             });
-            this.editorView.render();
+            $('#template-view', this.$el).html(this.mainView.render().$el);
+        },
+        newTemplate: function(e) {
+            if(e) e.preventDefault();
+            var tpl = new TemplateItem({
+                saved: false
+            });
+            this.collection.add(tpl);
+            this.select(tpl);
+            this.editTemplate();
+        },
+        editTemplate: function(e) {
+            if(e) e.preventDefault();
+            if(!this.selected) return;
+
+            this.mainView.remove();
+            this.mainView = new EditorView({
+                model: this.selected,
+            });
+            $('#template-view', this.$el).html(this.mainView.render().$el);
         },
     });
 
-    return TemplateView;
+    return TemplateLayoutView;
 });

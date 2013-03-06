@@ -26,6 +26,7 @@ define([
         showTemplateView: function() {
             if(this.templateView) return;
 
+            $('#get-started', this.$el).remove();
             this.templateView = new TemplateView({el: $('#template', this.$el)});
             this.templateView.render();
         },

@@ -6,6 +6,8 @@ require.config({
         bootstrap:  'libs/bootstrap/bootstrap',
         require:    'libs/require/require',
         text:       'libs/require/text',
+        rangy:      'libs/rangy/rangy-core',
+        ckeditor:   'libs/ckeditor/ckeditor',
     },
 
     shim: {
@@ -17,11 +19,19 @@ require.config({
         underscore: {
             exports: "_",
         },
+        ckeditor: {
+            exports: "CKEDITOR",
+            init: function() {
+                this.CKEDITOR_BASEPATH = 'js/libs/ckeditor/';
+                return this.CKEDITOR;
+            }
+        },
     },
 });
 
 require([
     'spaminator/spaminator',
+    'ckeditor',
 ], function(Spaminator) {
     Spaminator.initialize();
 });

@@ -17,13 +17,20 @@ define([
         },
         render: function() {
             this.$el.html(this.template(this.model.toJSON()));
-            if(this.model.get('active')) this.$el.addClass('active');
-            else this.$el.removeClass('active');
+            if(this.model.get('active')) {
+                this.$el.addClass('active');
+            } else {
+                this.$el.removeClass('active');
+            }
+            if(this.model.get('saved')) {
+                $('.template-unsaved', this.$el).hide();
+            } else {
+                $('.template-unsaved', this.$el).show();
+            }
             return this;
         },
         select: function(e) {
-            e.preventDefault();
-            this.model.set('active', true);
+            if(e) e.preventDefault();
             this.trigger('select', this.model);
         },
     });
