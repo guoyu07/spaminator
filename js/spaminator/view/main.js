@@ -11,8 +11,8 @@ define([
         el: $('#spaminator'),
 
         events: {
-//            'click #get-started': 'showTemplateView',
-            'click #get-started': 'showPopulationView',
+            'click #get-started': 'showTemplateView',
+//            'click #get-started': 'showPopulationView',
         },
 
         initialize: function() {

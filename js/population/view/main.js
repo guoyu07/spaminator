@@ -10,7 +10,9 @@ define([
     return Backbone.View.extend({
         template: _.template(ListTemplate),
         events: {
-            'click .population-add': 'showAdd',
+            'click .population-add':          'showAdd',
+            'click #population-entry-cancel': 'cancelAdd',
+            'click #population-entry-done':   'doAdd',
         },
         initialize: function() {
         },
@@ -20,6 +22,7 @@ define([
             this.$memberlist      = $('#population-member-list', this.$el);
             this.$memberlistempty = $('#population-member-list-empty', this.$el);
             this.$entrydialog     = $('#population-entry-dialog', this.$el);
+            this.$entrytext       = $('#population-entry-text', this.$el);
 
             this.$entrydialog.hide();
 //            this.collection.fetch();
@@ -30,6 +33,13 @@ define([
                 width: '600',
                 title: 'Add Members to Population',
             });
+        },
+        cancelAdd: function() {
+            this.$entrytext.val('');
+            this.$entrydialog.dialog('close');
+        },
+        doAdd: function() {
+            alert(this.$entrytext.val());
         },
     });
 });

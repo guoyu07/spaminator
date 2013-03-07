@@ -13,23 +13,6 @@ $maxid = 0;
 if(isset($_SESSION['spaminator-max-id']))
     $maxid = $_SESSION['spaminator-max-id'];
 
-/*
-$data = array(
-            1 => array(
-                'id'       => 1,
-                'title'    => 'A Template',
-                'modified' => 'Today',
-                'content'  => 'This is <strong>A Template</strong> and your name is {FIRST_NAME}.'
-            ),
-            2 => array(
-                'id'       => 2,
-                'title'    => 'Another Template',
-                'modified' => 'Yesterday',
-                'content'  => 'This is another template which will be sent to <strong>{FIRST_NAME} {LAST_NAME} &lt;{EMAIL}&gt;</strong>',
-            ),
-        );
- */
-
 $method = $_SERVER['REQUEST_METHOD'];
 
 switch($parts[0]) {
@@ -69,7 +52,7 @@ case 'template-list':
             $data[$id] = $client;
 
             header('HTTP/1.1 201 Created');
-            doJson($postdata);
+            doJson($client);
         default:
             do405($method);
         }
