@@ -18,9 +18,7 @@ define([
             this.setDirty(false);
         },
     });
-
     return {
         DirtyModel: DirtyModel,
     };
-
 });
