@@ -1,5 +1,5 @@
 define([], function() {
     return {
-        memberUri: 'data/index.php/population',
+        dataSource: 'data/index.php/population',
     };
 });
