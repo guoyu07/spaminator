@@ -21,6 +21,9 @@ define([
 
             this.$memberlist      = $('.population-member-list', this.$el);
             this.$memberlistempty = $('.population-member-list-empty', this.$el);
+            this.$nextstep        = $('.population-next-step', this.$el);
+
+            this.$nextstep.addClass('disabled');
 
             this.population.collection.on('add', this.addOne, this);
             this.population.collection.on('reset', this.addAll, this);
@@ -31,6 +34,8 @@ define([
             this.$memberlistempty.hide();
             this.$memberlist.append(el);
 
+            this.$nextstep.removeClass('disabled');
+
             var view = new MemberView({
                 model: model,
                 el: el,
@@ -40,6 +45,7 @@ define([
         addAll: function() {
             $('.population-member-list', this.$el).empty();
             this.$memberlistempty.show();
+            this.$nextstep.addClass('disabled');
             this.population.collection.each(this.addOne, this);
         },
         showAdd: function() {
