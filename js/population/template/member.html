@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html>
   <body>
-    <tr>
-      <td><a class="btn btn-mini" href="#"><i class="icon-trash"></i></a></td>
-      <td><%=id%></td>
-      <td><%=lastname%></td>
-      <td><%=firstname%></td>
-      <td><%=middlename%></td>
-      <td><%=prefix%></td>
-      <td><%=suffix%></td>
-      <td><%=username%></td>
-      <td><%=email%></td>
-    </tr>
+    <td><a class="btn btn-mini population-member-delete" href="#"><i class="icon-trash"></i></a></td>
+    <% if(!error) { %>
+    <td><%=bannerid%></td>
+    <td><%=lastname%></td>
+    <td><%=firstname%></td>
+    <td><%=middlename%></td>
+    <td><%=prefix%></td>
+    <td><%=suffix%></td>
+    <td><%=username%></td>
+    <td><%=email%></td>
+    <% } else { %>
+    <td colspan="8"><strong>Error:</strong> <%=error%> <%=id%></td>
+    <% } %>
   </body>
 </html>

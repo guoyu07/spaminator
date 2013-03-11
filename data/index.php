@@ -1,65 +1,381 @@
 <?php
 
+// Mangle the URI into something useful
 $uri = preg_replace('|^'.$_SERVER['SCRIPT_NAME'].'|', '', $_SERVER['REQUEST_URI']);
 $uri = preg_replace('|^/|', '', $uri);
+$uri = urldecode($uri);
+
+// Split into parts on the directory separator token
 $parts = explode('/', $uri);
 
 session_start();
+
 $data = array();
 if(isset($_SESSION['spaminator-data']))
     $data = unserialize($_SESSION['spaminator-data']);
 
-$maxid = 0;
-if(isset($_SESSION['spaminator-max-id']))
-    $maxid = $_SESSION['spaminator-max-id'];
+if(!isset($data['template']))
+    $data['template'] = array(
+        'maxid' => 0,
+        'data' => array()
+    );
+
+if(!isset($data['population']))
+    $data['population'] = array(
+        'maxid' => 0,
+        'maxmemberid' => 0,
+        'data' => array()
+    );
 
 $method = $_SERVER['REQUEST_METHOD'];
 
 switch($parts[0]) {
+case 'clear':
+    session_destroy();
+    header('HTTP/1.1 303 See Other');
+    header('Location: debug');
+    quit();
 case 'debug':
-    var_dump($maxid);
+    echo '<a href="clear">Clear All Data</a>';
     var_dump($data);
     quit();
 case 'population':
-
-case 'template-list':
     if(isset($parts[1])) {
-        $id = $parts[1];
-        if(!isset($data[$id])) do404($uri);
+        $popId = $parts[1];
+        if(!hasPopulation($popId)) doNotFound($uri);
 
-        switch($method) {
-        case 'GET':
-            doJson($data[$id]);
-        case 'PUT':
-            $client = getFromClient();
-            $data[$id] = $client;
+        if(isset($parts[2])) {
+            $memberId = $parts[2];
+            if(!hasPopulationMember($popId, $memberId)) doNotFound($uri);
+            switch($method) {
+            case 'GET':
+                doJson(getPopulationMember($popId, $memberId));
+            case 'DELETE':
+                deletePopulationMember($popId, $memberId);
+                doNoContent();
+            default:
+                doMethodNotAllowed($method);
+            }
+        } else {
+            switch($method) {
+            case 'GET':
+                doJson(getPopulation($popId));
+            case 'PUT':
+                $newpop = array();
+                $sourceData = getFromClient();
+                convertIntoPopulation($sourceData, $newpop);
 
-            doNoContent();
-        case 'DELETE':
-            unset($data[$id]);
-            doNoContent();
-        default:
-            do405($method);
+                foreach($newpop as $member) {
+                    setPopulationMember($popId, $member['id'], $member);
+                }
+
+                header('HTTP/1.1 200 OK');
+                doJson(getPopulation($popId));
+            case 'DELETE':
+                deletePopulation($popId);
+                doNoContent();
+            default:
+                doMethodNotAllowed($method);
+            }
         }
     } else {
         switch($method) {
         case 'GET':
-            doJson(array_values($data));
+            doJson(getAllPopulations());
         case 'POST':
-            $client = getFromClient();
-            $id = ++$maxid;
-            $client['id'] = $id;
-            $data[$id] = $client;
+            $population = array('members' => array());
+            $sourceData = getFromClient();
+            convertIntoPopulation($sourceData, $population['members']);
+            newPopulation($population);
+
+            header('HTTP/1.1 201 Created');
+            doJson($population);
+        default:
+            doMethodNotAllowed($method);
+        }
+    }
+    quit();
+case 'template-list':
+    if(isset($parts[1])) {
+        $id = $parts[1];
+        if(!hasTemplate($id)) doNotFound($uri);
+
+        switch($method) {
+        case 'GET':
+            doJson(getTemplate($id));
+        case 'PUT':
+            $template = getFromClient();
+            setTemplate($id, $template);
+
+            doNoContent();
+        case 'DELETE':
+            deleteTemplate($id);
+            doNoContent();
+        default:
+            doMethodNotAllowed($method);
+        }
+    } else {
+        switch($method) {
+        case 'GET':
+            doJson(getAllTemplates());
+        case 'POST':
+            $template = getFromClient();
+            newTemplate($template);
 
             header('HTTP/1.1 201 Created');
             doJson($client);
         default:
-            do405($method);
+            doMethodNotAllowed($method);
         }
     }
     quit();
 default:
-    do404($uri);
+    doNotFound($uri);
+}
+
+function convertIntoPopulation($sourceData, &$population)
+{
+    $input = preg_split('/[\n,]/', $sourceData['members']);
+
+    foreach($input as $val) {
+        $val = trim($val);
+
+        // Try Banner ID
+        if(preg_match('/[0-9]{9}/', $val)) {
+            $member = makeUpValues($val);
+            $population[$member['email']] = $member;
+            continue;
+        }
+
+        // Try Email
+        if(preg_match('/<?\S+@\S+>?/', $val)) {
+            $member = makeUpByEmail($val);
+            newPopulationMember($member);
+            $member['bannerid'] = '';
+            $population[$member['id']] = $member;
+            continue;
+        }
+
+        $error = makeMemberError($val, 'Unparseable');
+        $population[$error['id']] = $error;
+    }
+}
+
+function makeUpValues($bannerid)
+{
+    $email = "$bannerid@tux.appstate.edu";
+
+    return makeMember(
+        $email,
+        $bannerid,
+        'testFirst',
+        'testMiddle',
+        'testLast',
+        'testPrefix',
+        'testSuffix',
+        'testUsername',
+        $email,
+        false
+    );
+}
+
+function makeMember($bannerid, $firstname, $middlename, $lastname, $prefix, $suffix, $username, $email)
+{
+    return array(
+        'id'         => $email,
+        'bannerid'   => $bannerid,
+        'firstname'  => $firstname,
+        'middlename' => $middlename,
+        'lastname'   => $lastname,
+        'prefix'     => $prefix,
+        'suffix'     => $suffix,
+        'username'   => $username,
+        'email'      => $email,
+        'error'      => ''
+    );
+}
+
+function makeMemberError($id, $message)
+{
+    return array(
+        'id'         => $id,
+        'bannerid'   => '',
+        'firstname'  => '',
+        'middlename' => '',
+        'lastname'   => '',
+        'prefix'     => '',
+        'suffix'     => '',
+        'username'   => '',
+        'email'      => '',
+        'error'      => $message
+    );
+}
+
+function makeUpByEmail($email)
+{
+    $first = '';
+    $last  = '';
+    $user  = '';
+    $addr  = '';
+
+    $matches = array();
+
+    $sm = '(\S+)';
+    $em  = '((\S+)@\S+)';
+
+    // First Last <user@domain.com>
+    if(preg_match('/'.$sm.'\s'.$sm.'\s<'.$em.'>/', $email, $matches)) {
+        $first = $matches[1];
+        $last  = $matches[2];
+        $addr  = $matches[3];
+        $user  = $matches[4];
+    } else
+
+    // Last <user@domain.com>
+    if(preg_match('/'.$sm.'\s<'.$em.'>/', $email, $matches)) {
+        $last = $matches[1];
+        $addr = $matches[2];
+        $user = $matches[3];
+    } else
+
+    // <user@domain.com>
+    if(preg_match('/<'.$em.'>/', $email, $matches)) {
+        $addr = $matches[1];
+        $user = $matches[2];
+    } else
+
+    // user@domain.com
+    if(preg_match('/'.$em.'/', $email, $matches)) {
+        $addr = $matches[1];
+        $user = $matches[2];
+    }
+
+    return makeMember(
+        '',
+        $first,
+        '',
+        $last,
+        '',
+        '',
+        $user,
+        $email,
+        false
+    );
+
+    return $member;
+}
+
+function newPopulationMember(&$member)
+{
+    global $data;
+
+    $member['id'] = $member['email'];
+}
+
+function hasPopulationMember($popId, $memberId)
+{
+    global $data;
+    return isset($data['population']['data'][$popId]['members'][$memberId]);
+}
+
+function getPopulationMember($popId, $memberId)
+{
+    global $data;
+    return $data['population']['data'][$popId]['members'][$memberId];
+}
+
+function setPopulationMember($popId, $memberId, $member)
+{
+    global $data;
+    $data['population']['data'][$popId]['members'][$memberId] = $member;
+}
+
+function deletePopulationMember($popId, $memberId)
+{
+    global $data;
+    unset($data['population']['data'][$popId]['members'][$memberId]);
+}
+
+function getAllPopulationMembers($popId)
+{
+    global $data;
+    return $data['population']['data'][$popId]['members'];
+}
+
+function newPopulation(&$population)
+{
+    global $data;
+    $id = ++$data['population']['maxid'];
+    $population['id'] = $id;
+    $data['population']['data'][$id] = $population;
+}
+
+function hasPopulation($id)
+{
+    global $data;
+    return isset($data['population']['data'][$id]);
+}
+
+function getPopulation($id)
+{
+    global $data;
+    return $data['population']['data'][$id];
+}
+
+function setPopulation($id, $population)
+{
+    global $data;
+    $data['population']['data'][$id] = $population;
+}
+
+function deletePopulation($id)
+{
+    global $data;
+    unset($data['population']['data'][$id]);
+}
+
+function getAllPopulations()
+{
+    global $data;
+    return $data['population']['data'];
+}
+
+function newTemplate(&$template)
+{
+    global $data;
+    $id = ++$data['template']['maxid'];
+    $template['id'] = $id;
+    $data['template']['data'][$id] = $template;
+}
+
+function hasTemplate($id)
+{
+    global $data;
+    return isset($data['template']['data'][$id]);
+}
+
+function getTemplate($id)
+{
+    global $data;
+    return $data['template']['data'][$id];
+}
+
+function setTemplate($id, $template)
+{
+    global $data;
+    $data['template']['data'][$id] = $template;
+}
+
+function deleteTemplate($id)
+{
+    global $data;
+    unset($data['template']['data'][$id]);
+}
+
+function getAllTemplates()
+{
+    global $data;
+    return $data['template']['data'];
 }
 
 function getFromClient()
@@ -83,7 +399,7 @@ function doNoContent()
     quit();
 }
 
-function do405($method = null)
+function doMethodNotAllowed($method = null)
 {
     header('HTTP/1.1 405 Method Not Allowed');
     echo "Method Not Allowed";
@@ -94,7 +410,7 @@ function do405($method = null)
     quit();
 }
 
-function do404($path = null)
+function doNotFound($path = null)
 {
     header('HTTP/1.1 404 Not Found');
     echo "Not Found";
@@ -108,9 +424,7 @@ function do404($path = null)
 function quit()
 {
     global $data;
-    global $maxid;
     $_SESSION['spaminator-data'] = serialize($data);
-    $_SESSION['spaminator-max-id'] = $maxid;
     session_write_close();
     exit();
 }

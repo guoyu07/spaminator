@@ -10,6 +10,7 @@ define([
             'suffix':     '',
             'username':   '',
             'email':      '',
+            'error':      '',
         },
     });
 });

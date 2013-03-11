@@ -1,15 +1,19 @@
 define([
     'underscore',
     'backbone',
+    'population/model/population',
     'text!population/template/add.html',
     'jquery-ui',
-], function(_, Backbone, AddTemplate) {
+], function(_, Backbone, Population, AddTemplate) {
     return Backbone.View.extend({
         template: _.template(AddTemplate),
         events: {
             'click .population-entry-done':   'doAdd',
             'click .population-entry-cancel': 'cancelAdd',
             'remove': 'cleanup',
+        },
+        initialize: function(options) {
+            this.population = options.population;
         },
         render: function() {
             var compiledTemplate = this.template({});
@@ -22,7 +26,9 @@ define([
             return this;
         },
         doAdd: function(e) {
-            alert($('.population-entry-text', this.$el).val());
+            this.population.set('members', $('.population-entry-text', this.$el).val());
+
+            this.population.save();
             this.remove();
         },
         cancelAdd: function(e) {

@@ -1,5 +1,5 @@
 define([], function() {
     return {
-        populationUri: 'data/index.php/template-list',
+        memberUri: 'data/index.php/population',
     };
 });
