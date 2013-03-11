@@ -1,27 +1,34 @@
 require.config({
     paths: {
-        'jquery':     'libs/jquery/jquery',
-        'jquery-ui':  'libs/jquery/jquery-ui',
-        'underscore': 'libs/underscore/underscore',
-        'backbone':   'libs/backbone/backbone',
-        'bootstrap':  'libs/bootstrap/bootstrap',
+        'jquery':     'libs/jquery',
+        'jquery-ui':  'libs/jquery-ui',
+        'underscore': 'libs/underscore',
+        'backbone':   'libs/backbone',
+        'marionette': 'libs/marionette',
+        'bootstrap':  'libs/bootstrap',
         'require':    'libs/require/require',
         'text':       'libs/require/text',
-        'rangy':      'libs/rangy/rangy-core',
         'ckeditor':   'libs/ckeditor/ckeditor',
         'libess':     'libs/ess/libess',
     },
 
     shim: {
-        bootstrap: ["jquery"],
-        backbone: {
+        'bootstrap': ["jquery"],
+        'backbone': {
             deps: ["underscore", "jquery"],
             exports: "Backbone",
         },
-        underscore: {
+        'jquery-ui': {
+            deps: ["jquery"],
+        },
+        'underscore': {
             exports: "_",
         },
-        ckeditor: {
+        'marionette': {
+            deps: ["backbone"],
+            exports: "Backbone.Marionette",
+        },
+        'ckeditor': {
             exports: "CKEDITOR",
             init: function() {
                 this.CKEDITOR_BASEPATH = 'js/libs/ckeditor/';
@@ -29,11 +36,4 @@ require.config({
             }
         },
     },
-});
-
-require([
-    'spaminator/spaminator',
-    'ckeditor',
-], function(Spaminator) {
-    Spaminator.initialize();
 });
