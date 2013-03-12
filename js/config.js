@@ -4,7 +4,6 @@ require.config({
         'jquery-ui':  'libs/jquery-ui',
         'underscore': 'libs/underscore',
         'backbone':   'libs/backbone',
-        'marionette': 'libs/marionette',
         'bootstrap':  'libs/bootstrap',
         'require':    'libs/require/require',
         'text':       'libs/require/text',
@@ -23,10 +22,6 @@ require.config({
         },
         'underscore': {
             exports: "_",
-        },
-        'marionette': {
-            deps: ["backbone"],
-            exports: "Backbone.Marionette",
         },
         'ckeditor': {
             exports: "CKEDITOR",
