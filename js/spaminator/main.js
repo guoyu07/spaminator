@@ -5,8 +5,11 @@ define([
         var mainView = new MainView({
             el: el,
             views: {
-                'welcome':    'spaminator/view/welcome.js',
-                'population':
+                'welcome':    'spaminator/view/welcome',
+                'population': 'population/view/main',
+                'template':   'template/view/main',
+            },
+            initialView: 'welcome',
         });
         mainView.render();
     };

@@ -32,3 +32,7 @@ require.config({
         },
     },
 });
+
+require(['spaminator/main'], function(Spaminator) {
+    Spaminator.initialize($('#spaminator-container'));
+});
