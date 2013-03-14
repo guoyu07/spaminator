@@ -6,10 +6,9 @@ define([
     'template/model/item',
     'template/view/item',
     'template/view/editor',
-    'template/view/view',
     'text!template/template/layout.html',
     'text!template/template/loading.html',
-], function($, _, Backbone, TemplateList, TemplateItem, ListItemView, EditorView, TemplateView, layoutTemplate, loadingTemplate) {
+], function($, _, Backbone, TemplateList, TemplateItem, ListItemView, EditorView, layoutTemplate, loadingTemplate) {
     var TemplateLayoutView = Backbone.View.extend({
         initialize: function() {
             this.layout  = _.template(layoutTemplate);
@@ -19,13 +18,17 @@ define([
 
             this.collection.on('add', this.addOne, this);
             this.collection.on('reset', this.addAll, this);
+            this.collection.on('sync', this.notifySync, this);
+            this.collection.on('destroy', this.updateEmpty, this);
         },
         events: {
             'click #template-new': 'newTemplate',
-            'click #template-edit': 'editTemplate',
+//            'click #template-edit': 'editTemplate',
         },
         render: function() {
             this.$el.html(this.layout({}));
+
+            this.$listempty = $('.template-list-empty', this.$el);
 
             $('#template-list', this.$el).html(this.loading({title: 'templates'}));
 
@@ -39,8 +42,17 @@ define([
             });
             view.on('select', this.select, this);
             $('#template-list', this.$el).prepend(view.render().el);
+            this.updateEmpty();
+            this.$listempty.hide();
             if(model.isNew()) {
                 this.select(view);
+            }
+        },
+        updateEmpty: function() {
+            if(this.collection.length > 0) {
+                this.$listempty.hide();
+            } else {
+                this.$listempty.show();
             }
         },
         addAll: function() {
@@ -71,21 +83,20 @@ define([
                 }
             }
         },
+        notifySync: function(e) {
+            if(this.selected && this.selected.model) {
+                this.trigger('changed', this.selected.model);
+            }
+        },
         newTemplate: function(e) {
             if(e) e.preventDefault();
             var tpl = new TemplateItem();
             this.collection.add(tpl);
-            this.editTemplate();
         },
-        editTemplate: function(e) {
-            if(e) e.preventDefault();
-            if(!this.selected) return;
-
-            this.mainView.remove();
-            this.mainView = new EditorView({
-                model: this.selected.model,
-            });
-            $('#template-view', this.$el).html(this.mainView.render().$el);
+        getSelectedTemplate: function() {
+            if(this.selected && this.selected.model) {
+                return this.selected.model;
+            } else return undefined;
         },
     });
 

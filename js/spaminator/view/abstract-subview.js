@@ -6,8 +6,14 @@
  *            this.subview = new MyFancySubview();
  *            ...
  *        }
- * 2. You will need some kind of event handler that enables and disables
- *    the 'next' button based on things that happen within the subview:
+ * 2. You MUST provide a function that determines whether or not the 'next'
+ *    button should be enabled, and it must be called this.updateNext().  It
+ *    takes no parameters but should call this.enableNext() and this.disableNext()
+ *    appropriately.  It may be the case that it just calls this.enableNext()
+ *    becuase there is no case in which the 'next' button should be disabled,
+ *    and that is fine.  You may also call this yourself on event handlers, for
+ *    instance your subview probably provides an onChange event of some kind, and
+ *    it could call updateNext directly.  For example:
  *        initialize = function() {
  *            ...
  *            this.listenTo(this.subview, 'somethingHappened', this.updateNext);
@@ -57,6 +63,7 @@ define([
         initNext: function() {
             this.$next = $('.spaminator-next', this.$el);
             this.$next.addClass('disabled');
+            this.updateNext();
         },
         enableNext: function() {
             this.$next.removeClass('disabled').addClass('btn-success');

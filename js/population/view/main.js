@@ -64,5 +64,8 @@ define([
             });
             popup.render();
         },
+        getCollection: function() {
+            return this.population.collection;
+        },
     });
 });

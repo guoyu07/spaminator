@@ -13,6 +13,7 @@ define([
             this.listenTo(this.subview, 'popChange', this.updateNext);
         },
         updateNext: function(collection) {
+            if(!collection) collection = this.subview.getCollection();
             if(collection.length > 0) {
                 this.enableNext();
             } else {
