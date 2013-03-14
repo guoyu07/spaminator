@@ -19,7 +19,6 @@ define([
             _.each(options.views, function(value, key, list) {
                 if(first == null) first = key;
                 this.views[key] = _.extend(_.clone(Config.viewDefaults), value);
-                console.log(this.views);
             }, this);
 
             this.render();
@@ -49,8 +48,18 @@ define([
         },
         updateMenu: function() {
             _.each(this.views, function(value, key, list) {
+                // Get the menu element
+                var el = $('.spaminator-link[data-view="'+key+'"]', this.$menu);
+
+                // Set active class
+                if(key == this.currentView) {
+                    el.parent('li').addClass('active');
+                } else {
+                    el.parent('li').removeClass('active');
+                }
+
+                // Hide unloaded views if that's appropriate
                 if(value.hideUntilLoad) {
-                    var el = $('.spaminator-link[data-view="'+key+'"]', this.$el);
                     if(!this.views[key].instance) {
                         el.hide();
                     } else {
@@ -66,7 +75,6 @@ define([
             // It loads the view you want the first time you want it.
             if(!this.views[viewName].instance) {
                 this.$content.html(this.loadingTemplate({title: viewName}));
-                console.log(this.views[viewName]);
                 require([require, this.views[viewName].require],
                     function(require, TheView) {
                         me.views[viewName].instance = new TheView();
@@ -79,11 +87,12 @@ define([
                 return;
             }
 
-            this.updateMenu();
-
             this.currentView = viewName;
             this.views[viewName].instance.setElement(this.$content);
             this.views[viewName].instance.render();
+
+            this.updateMenu();
+
             this.trigger('change');
         },
         switchClicked: function(e) {
