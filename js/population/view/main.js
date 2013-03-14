@@ -26,12 +26,23 @@ define([
             this.$nextstep.addClass('disabled');
 
             this.population.collection.on('add', this.addOne, this);
-            this.population.collection.on('reset', this.addAll, this);
-            this.population.collection.on('sync', this.addAll, this);
+            this.population.collection.on('reset', this.render, this);
+            this.population.collection.on('sync', this.render, this);
+
+            this.population.collection.on('add', this.changeEmpty, this);
+            this.population.collection.on('destroy', this.changeEmpty, this);
+
+            this.addAll();
+        },
+        changeEmpty: function() {
+            if(this.population.collection.length > 0) {
+                this.$memberlistempty.hide();
+            } else {
+                this.$memberlistempty.show();
+            }
         },
         addOne: function(model) {
             var el = $('<tr>');
-            this.$memberlistempty.hide();
             this.$memberlist.append(el);
 
             this.$nextstep.removeClass('disabled');
@@ -44,7 +55,6 @@ define([
         },
         addAll: function() {
             $('.population-member-list', this.$el).empty();
-            this.$memberlistempty.show();
             this.$nextstep.addClass('disabled');
             this.population.collection.each(this.addOne, this);
         },

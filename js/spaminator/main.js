@@ -5,9 +5,28 @@ define([
         var mainView = new MainView({
             el: el,
             views: {
-                'welcome':    'spaminator/view/welcome',
-                'population': 'population/view/main',
-                'template':   'template/view/main',
+                'welcome': {
+                    'require': 'spaminator/view/welcome',
+                },
+                'population': {
+                    'require': 'population/view/main',
+                    'hideUntilLoad': true,
+                },
+                'template': {
+                    'require': 'template/view/main',
+                    'hideUntilLoad': true,
+                },
+                'confirmation': {
+                    'require': 'spaminator/view/confirmation',
+                    'hideUntilLoad': true,
+                },
+                'report': {
+                    'require': 'spaminator/view/report',
+                    'hideUntilLoad': true,
+                },
+                'history': {
+                    'require': 'spaminator/view/history',
+                },
             },
             initialView: 'welcome',
         });

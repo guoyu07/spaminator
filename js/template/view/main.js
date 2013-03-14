@@ -42,16 +42,12 @@ define([
             }
         },
         addAll: function() {
+            console.log(this.collection.models);
             $('#template-list', this.$el).empty();
             this.collection.each(this.addOne, this);
         },
         select: function(view) {
-            // If editing, save changes
-            if(this.selected && this.selected.model) {
-                if(this.selected.model.isDirty()) {
-                    this.selected.model.save();
-                }
-            }
+            this.saveEditor();
 
             if(this.selected) this.selected.setInactive();
             this.selected = view;
@@ -63,6 +59,14 @@ define([
                 model: view.model,
             });
             $('#template-view', this.$el).html(this.mainView.render().$el);
+        },
+        saveEditor: function() {
+            // If editing, save changes
+            if(this.selected && this.selected.model) {
+                if(this.selected.model.isDirty()) {
+                    this.selected.model.save();
+                }
+            }
         },
         newTemplate: function(e) {
             if(e) e.preventDefault();

@@ -123,7 +123,7 @@ case 'template-list':
             newTemplate($template);
 
             header('HTTP/1.1 201 Created');
-            doJson($client);
+            doJson($template);
         default:
             doMethodNotAllowed($method);
         }
@@ -375,7 +375,7 @@ function deleteTemplate($id)
 function getAllTemplates()
 {
     global $data;
-    return $data['template']['data'];
+    return array_values($data['template']['data']);
 }
 
 function getFromClient()

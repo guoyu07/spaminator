@@ -3,6 +3,7 @@ define([
 ], function(Backbone) {
     return Backbone.Model.extend({
         defaults: {
+            'bannerId':   '',
             'firstName':  '',
             'middleName': '',
             'lastName':   '',

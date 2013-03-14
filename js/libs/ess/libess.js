@@ -18,7 +18,13 @@ define([
             this.setDirty(false);
         },
     });
+    var BaseView = Backbone.View.extend({
+        assign: function(view, selector) {
+            view.setElement(this.$(selector)).render();
+        },
+    });
     return {
         DirtyModel: DirtyModel,
+        BaseView: BaseView,
     };
 });

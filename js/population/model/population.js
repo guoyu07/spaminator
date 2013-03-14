@@ -7,7 +7,7 @@ define([
     return ESS.DirtyModel.extend({
         urlRoot: Config.dataSource,
         initialize: function() {
-            this.collection = new MemberCollection({url: this.url});
+            this.collection = new MemberCollection([], {url: this.url});
             this.listenTo(this, 'sync', this.fixurl);
         },
         parse: function(response) {
