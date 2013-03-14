@@ -36,8 +36,10 @@ case 'clear':
     header('Location: debug');
     quit();
 case 'debug':
+    echo "<!DOCTYPE html>\n<html><head><title>Debugging</title><meta http-equiv=\"refresh\" content=\"2\"></head><body>";
     echo '<a href="clear">Clear All Data</a>';
     var_dump($data);
+    echo "</body></html>";
     quit();
 case 'population':
     if(isset($parts[1])) {
