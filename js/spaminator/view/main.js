@@ -10,6 +10,10 @@ define([
         template: _.template(LayoutTemplate),
         menuTemplate: _.template(MenuTemplate),
         loadingTemplate: _.template(LoadingTemplate),
+        programData: {
+            'selectedPopulation': null,
+            'selectedTemplate': null,
+        },
         events: {
             'click .spaminator-link': 'switchClicked',
         },
@@ -71,6 +75,18 @@ define([
         switchTo: function(viewName) {
             var me = this;
 
+            // If the view name is the special code '.next', just go to the next view.
+            if(viewName == '.next') {
+                this.switchBy(1);
+                return;
+            }
+
+            // If the view name is the special code '.prev', just go to the prev view.
+            if(viewName == '.prev') {
+                this.switchBy(-1);
+                return;
+            }
+
             // This whole section is why it's efficient, or maybe why it's not efficient.
             // It loads the view you want the first time you want it.
             if(!this.views[viewName].instance) {
@@ -95,10 +111,35 @@ define([
 
             this.trigger('change');
         },
+        switchBy: function(offset) {
+            var views = Object.keys(this.views);
+            this.switchTo(views[views.indexOf(this.currentView) + offset]);
+        },
         switchClicked: function(e) {
             e.preventDefault();
+            target = $(e.target);
+
+            // If disabled, return
+            if(target.hasClass('disabled')) return;
+
+            // If has class spaminator-next, just go to whatever the next view is.
+            if(target.hasClass('spaminator-next')) {
+                this.switchBy(1);
+                return;
+            }
+
+            // If has class spaminator-prev, just go to whatever the previous view is.
+            if(target.hasClass('spaminator-prev')) {
+                this.switchBy(-1);
+                return;
+            }
+
+            // If data-view is not set, return
             var view = $(e.target).attr('data-view');
-            if(!view) return;
+            if(!view) {
+                console.log('Got click on class .spaminator-link but no data-view was set.');
+                return;
+            }
 
             this.switchTo(view);
         },

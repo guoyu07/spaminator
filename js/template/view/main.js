@@ -30,6 +30,8 @@ define([
             $('#template-list', this.$el).html(this.loading({title: 'templates'}));
 
             this.collection.fetch();
+
+            if(this.selected) this.select(this.selected);
         },
         addOne: function(model) {
             var view = new ListItemView({
@@ -42,7 +44,6 @@ define([
             }
         },
         addAll: function() {
-            console.log(this.collection.models);
             $('#template-list', this.$el).empty();
             this.collection.each(this.addOne, this);
         },
@@ -55,10 +56,12 @@ define([
 
             if(this.mainView) this.mainView.remove();
 
-            this.mainView = new TemplateView({
+            this.mainView = new EditorView({
                 model: view.model,
             });
             $('#template-view', this.$el).html(this.mainView.render().$el);
+
+            this.trigger('selected', view.model);
         },
         saveEditor: function() {
             // If editing, save changes

@@ -9,15 +9,19 @@ define([
                     'require': 'spaminator/view/welcome',
                 },
                 'population': {
-                    'require': 'population/view/main',
+                    'require': 'spaminator/view/population',
                     'hideUntilLoad': true,
                 },
                 'template': {
-                    'require': 'template/view/main',
+                    'require': 'spaminator/view/template',
                     'hideUntilLoad': true,
                 },
-                'confirmation': {
-                    'require': 'spaminator/view/confirmation',
+                'review': {
+                    'require': 'spaminator/view/review',
+                    'hideUntilLoad': true,
+                },
+                'send': {
+                    'require': 'spaminator/view/send',
                     'hideUntilLoad': true,
                 },
                 'report': {

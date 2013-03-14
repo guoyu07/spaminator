@@ -17,13 +17,10 @@ define([
             this.population = new Population();
         },
         render: function() {
-            this.$el.html(this.template({}));
+            this.$el.html(this.template());
 
             this.$memberlist      = $('.population-member-list', this.$el);
             this.$memberlistempty = $('.population-member-list-empty', this.$el);
-            this.$nextstep        = $('.population-next-step', this.$el);
-
-            this.$nextstep.addClass('disabled');
 
             this.population.collection.on('add', this.addOne, this);
             this.population.collection.on('reset', this.render, this);
@@ -40,22 +37,23 @@ define([
             } else {
                 this.$memberlistempty.show();
             }
+
+            this.trigger('popChange', this.population.collection);
         },
         addOne: function(model) {
             var el = $('<tr>');
             this.$memberlist.append(el);
-
-            this.$nextstep.removeClass('disabled');
 
             var view = new MemberView({
                 model: model,
                 el: el,
             });
             view.render();
+
+            this.trigger('popChange', this.population.collection);
         },
         addAll: function() {
             $('.population-member-list', this.$el).empty();
-            this.$nextstep.addClass('disabled');
             this.population.collection.each(this.addOne, this);
         },
         showAdd: function() {
