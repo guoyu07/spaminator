@@ -21,7 +21,15 @@
 }
 
 .template-item-actions {
-    line-height: 4em;
+    line-height: 3em;
+}
+
+.review-message-envelope strong {
+    display: block;
+    float: left;
+    width: 75px;
+    text-align: right;
+    margin-right: 0.5em;
 }
 
 #footer {

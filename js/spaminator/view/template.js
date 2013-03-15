@@ -16,13 +16,14 @@ define([
         updateNext: function(template) {
             if(!template) template = this.subview.getSelectedTemplate();
             if(!template) {
-                this.disableNext();
+                this.disableNext('No Template Selected', 'Please select a template before proceeding.');
                 return;
             }
             if(template.get('title').length > 0 && template.get('content').length > 0) {
+                this.persona.set('selectedTemplate', template);
                 this.enableNext();
             } else {
-                this.disableNext();
+                this.disableNext('Incomplete Template', 'Please enter a complete template before proceeding.');
             }
         },
     });

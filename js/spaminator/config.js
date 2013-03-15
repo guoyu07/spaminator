@@ -4,5 +4,6 @@ define([], function() {
             hideUntilLoad: false,
             instance: null,
         },
+        personaSource: 'data/index.php/persona',
     }
 });

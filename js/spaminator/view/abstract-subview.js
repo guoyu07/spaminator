@@ -21,14 +21,20 @@
  *        ...
  *        updateNext = function() {
  *            if(someCondition) {
- *                this.enableNext();   // Enables the 'next' button
+ *                // Enable the 'next' button:
+ *                this.enableNext();
  *            } else {
- *                this.disableNext();  // Disables the 'next' button
+ *                // Disable the 'next' button, with title and content for
+ *                // popover:
+ *                this.disableNext('Missing Data',
+ *                    'Please provide the missing data');
  *            }
  *        }
  * 3. The 'next' button is disabled by default, use this.enableNext() and
  *    this.disableNext() wherever you'd like to control the behavior of this
  *    button
+ * 4. You MUST provide a Title and Content for a bootstrap popover when you
+ *    disableNext.
  * 4. IFF you override render(), and you're interested in subviews, you will need
  *    to call this.initNext() within your render function.  If you don't override
  *    render(), it will just happen for you.
@@ -36,6 +42,8 @@
  *    call this.renderSubview() within your render function.  If you don't
  *    override render(), it will just happen for you, but only if this.subview is
  *    set.
+ * 6. If you are interested in the persona, override setPersona and give it a
+ *    listenTo.
  *
  * To gain all the nice functionality of this class, your template will need:
  *
@@ -48,6 +56,7 @@
 define([
     'underscore',
     'backbone',
+    'bootstrap',
 ], function(_, Backbone) {
     return Backbone.View.extend({
         render: function() {
@@ -67,9 +76,19 @@ define([
         },
         enableNext: function() {
             this.$next.removeClass('disabled').addClass('btn-success');
+            this.$next.popover('destroy');
         },
-        disableNext: function() {
+        disableNext: function(title, content) {
             this.$next.addClass('disabled').removeClass('btn-success');
+
+            this.$next.popover({
+                trigger: 'hover',
+                title: title,
+                content: content,
+            });
         },
+        setPersona: function(persona) {
+            this.persona = persona;
+        }
     });
 });

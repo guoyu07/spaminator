@@ -38,9 +38,12 @@ case 'clear':
 case 'debug':
     echo "<!DOCTYPE html>\n<html><head><title>Debugging</title><meta http-equiv=\"refresh\" content=\"2\"></head><body>";
     echo '<a href="clear">Clear All Data</a>';
+    var_dump(getPersona());
     var_dump($data);
     echo "</body></html>";
     quit();
+case 'persona':
+    doJson(getPersona());
 case 'population':
     if(isset($parts[1])) {
         $popId = $parts[1];
@@ -135,12 +138,28 @@ default:
     doNotFound($uri);
 }
 
+function getPersona()
+{
+    return array(
+        'authenticated' => true,
+        'senderName'          => 'Jeff Tickle',
+        'senderEmail'         => 'ticklejw@appstate.edu',
+        'permission'    => array(
+            'spaminate'     => true,
+            'changePersona' => false,
+            'changeName'    => true,
+        )
+    );
+}
+
 function convertIntoPopulation($sourceData, &$population)
 {
     $input = preg_split('/[\n,]/', $sourceData['members']);
 
     foreach($input as $val) {
         $val = trim($val);
+
+        if(empty($val)) continue;
 
         // Try Banner ID
         if(preg_match('/[0-9]{9}/', $val)) {

@@ -15,9 +15,10 @@ define([
         updateNext: function(collection) {
             if(!collection) collection = this.subview.getCollection();
             if(collection.length > 0) {
+                this.persona.set('selectedPopulation', collection);
                 this.enableNext();
             } else {
-                this.disableNext();
+                this.disableNext('Population is Empty', 'Please provide a set of recipients by creating a population on this page.');
             }
         },
     });

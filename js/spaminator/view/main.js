@@ -2,14 +2,16 @@ define([
     'underscore',
     'backbone',
     'spaminator/config',
+    'spaminator/model/persona',
     'text!spaminator/template/layout.html',
     'text!spaminator/template/menu.html',
     'text!spaminator/template/loading.html',
-], function(_, Backbone, Config, LayoutTemplate, MenuTemplate, LoadingTemplate) {
+], function(_, Backbone, Config, Persona, LayoutTemplate, MenuTemplate, LoadingTemplate) {
     return Backbone.View.extend({
         template: _.template(LayoutTemplate),
         menuTemplate: _.template(MenuTemplate),
         loadingTemplate: _.template(LoadingTemplate),
+        persona: null,
         programData: {
             'selectedPopulation': null,
             'selectedTemplate': null,
@@ -18,6 +20,13 @@ define([
             'click .spaminator-link': 'switchClicked',
         },
         initialize: function(options) {
+            // Initialize Persona
+            var me = this;
+            window.persona = this.persona = new Persona();
+            this.persona.url = Config.personaSource;
+            this.persona.fetch();
+
+            // Initialize Views
             this.views = {};
             var first = null;
             _.each(options.views, function(value, key, list) {
@@ -27,6 +36,7 @@ define([
 
             this.render();
 
+            // Switch to Initial View
             if(options.initialView) {
                 this.switchTo(options.initialView);
             } else {
@@ -94,6 +104,7 @@ define([
                 require([require, this.views[viewName].require],
                     function(require, TheView) {
                         me.views[viewName].instance = new TheView();
+                        me.views[viewName].instance.setPersona(me.persona);
                         me.switchTo.call(me, viewName);
                     },
                     function(error) {

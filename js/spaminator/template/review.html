@@ -3,11 +3,26 @@
   <body>
     <div class="row">
       <div class="span12">
-        <h1>Step 3: Review and Send</h1>
-        <p class="lead">Please look over the information below to make sure it is correct.  You can also send yourself a test email before firing off to the entire population.</p>
-        <p style="margin: auto; text-align: center;">
+        <p class="pull-right">
           <a href="#" class="btn btn-large spaminator-next spaminator-link" data-view="template">Send Emails <i class="icon-arrow-right icon-white"></i></a>
         </p>
+        <h1>Step 4: Review and Test</h1>
+        <p class="lead">Please look over the information below to make sure it is correct. You must send yourself a test email before you may send to the selected population.</p>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="span6">
+        <h2>Message Envelope</h2>
+        <p class="review-message-envelope"><strong>From:</strong> <%-from%></p>
+        <p class="review-message-envelope"><strong>Subject:</strong> <%=subject%></p>
+        <h3>Recipients</h3>
+        <p>Click on a recipient to view the email that will be sent to them.</p>
+        <div class="spaminator-review-recipients"></div>
+      </div>
+      <div class="span6">
+        <h2 class="text-error">Test Email</h2>
+        <p>Please send a test message to yourself by filling in this form.</p>
       </div>
     </div>
   </body>

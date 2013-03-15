@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <div class="row">
+      <div class="span12">
+        <p class="pull-right">
+          <a href="#" class="btn btn-large spaminator-next spaminator-link" data-view=".next">Step 4: Review and Test <i class="icon-arrow-right icon-white"></i></a>
+        </p>
+        <h1>Step 3: Select Message Sender</h1>
+        <p class="lead">
+          <% if(permission.changePersona) { %>
+            You have permission to send this message on behalf of anyone.
+          <% } else { %>
+            <% if(permission.changeName) { %>
+              You may change how your name appears, but it must be "from" your email address.
+            <% } else { %>
+              You may send this email as yourself.
+            <% } %>
+            If you would like to send this email on behalf of someone else, please <a href="http://ess.appstate.edu/request-support">contact ESS</a>.</p>
+          <% } %>
+        </p>
+        <form class="form-horizontal">
+          <div class="control-group success">
+            <label class="control-label" for="senderName">Name</label>
+            <div class="controls">
+              <% if(permission.changePersona || permission.changeName) { %>
+                <input type="text" id="senderName" placeholder="Sender Name" value="<%=senderName%>">
+              <% } else { %>
+                <span class="input-xlarge uneditable-input"><%=senderName%></span>
+              <% } %>
+              <span class="help-inline" id="senderNameHelp"></span>
+            </div>
+          </div>
+          <div class="control-group success">
+            <label class="control-label" for="senderEmail">Email</label>
+            <div class="controls">
+              <% if(permission.changePersona) { %>
+                <input type="text" id="senderEmail" placeholder="Sender Email" value="<%=senderEmail%>">
+              <% } else { %>
+                <span class="input-xlarge uneditable-input"><%=senderEmail%></span>
+              <% } %>
+              <span class="help-inline" id="senderEmailHelp"></span>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

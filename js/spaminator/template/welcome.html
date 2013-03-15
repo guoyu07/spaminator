@@ -4,7 +4,19 @@
     <div class="hero-unit">
       <h1>Spaminator</h1>
       <p class="lead">Send emails to lots of people the right way.</p>
-      <p>
+      <div class="spaminator-welcome-loading">
+        <p class="lead">Loading Personal Settings...</p>
+        <div class="progress progress-striped active">
+          <div class="bar" style="width: 100%;"></div>
+        </div>
+      </div>
+      <p class="text-error spaminator-welcome-unauthenticated">
+        You have not authenticated.  <a class="btn btn-large btn-primary" href="#"><i class="icon-white icon-user"></i> Log In with Shibboleth</a></p>
+      </p>
+      <div class="alert alert-error spaminator-welcome-unauthorized">
+        <p>You have not been granted permission to use the Spaminator.  Please <a href="http://ess.appstate.edu/request-support">contact ESS</a> to gain access.</p>
+      </div>
+      <p class="spaminator-welcome-authorized">
         <a class="btn btn-large btn-success spaminator-next spaminator-link" href="#">Get Started <i class="icon-arrow-right icon-white"></i></a>
         <a class="btn btn-large" data-view="history" href="#">View History</a>
       </p>

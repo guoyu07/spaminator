@@ -16,6 +16,10 @@ define([
                     'require': 'spaminator/view/template',
                     'hideUntilLoad': true,
                 },
+                'sender': {
+                    'require': 'spaminator/view/sender',
+                    'hideUntilLoad': true,
+                },
                 'review': {
                     'require': 'spaminator/view/review',
                     'hideUntilLoad': true,
