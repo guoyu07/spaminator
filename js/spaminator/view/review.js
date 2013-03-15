@@ -2,11 +2,12 @@ define([
     'underscore',
     'backbone',
     'spaminator/view/abstract-subview',
+    'spaminator/review/view/member',
     'text!spaminator/template/review.html',
-], function(_, Backbone, AbstractSubview, ReviewTemplate) {
+], function(_, Backbone, AbstractSubview, ReviewTemplate, MemberView) {
     return AbstractSubview.extend({
         template: _.template(ReviewTemplate),
-        tested: false,
+        hasTested: false,
         render: function() {
             var from = this.persona.get('senderName') + " <" + this.persona.get('senderEmail') + ">";
 
@@ -21,18 +22,35 @@ define([
                 subject: subject ? subject : 'No Template Selected!',
             }));
 
+                /*            this.$population = $('.review-population', this.$el);
+            var population = this.persona.get('selectedPopulation');
+            if(population) {
+                this.$population.empty();
+                population.each(function(model) {
+                    var view = new MemberView({
+                        model: model,
+                    });
+                    view.on('click', this.recipientClicked, this);
+                    this.$population.append(view.render().el);
+                }, this);
+            }*/
+
             this.$unsent = $('.review-unsent-email', this.$el);
             this.initNext();
         },
         updateNext: function() {
             var next = $('.spaminator-next', this.$el);
 
-            if(!this.persona.get('selectedTemplate') || !this.persona.get('selectedPopulation')) {
-                this.disableNext('Missing Envelope Data', 'Please check thie Message Envelope settings and fill in the missing data.');
-                return;
+            var population = this.persona.get('selectedPopulation');
+            if(!population || population.length < 1) {
+                this.disableNext('Missing Population', 'Your recipient population is empty.  Please select "population" from the menu at the top of the page to add members.');
             }
 
-            if(!this.hasTested()) {
+            if(!this.persona.get('selectedTemplate')) {
+                this.disableNext('Missing Template', 'You did not select a template.  Please click "template" from the menu at the top of the page to select or create a template.');
+            }
+
+            if(!this.hasTested) {
                 this.disableNext('Untested Spamination', 'Please send a test email to yourself first.');
                 return;
             } else {
@@ -41,22 +59,9 @@ define([
 
             this.enableNext();
         },
-        setSender: function(sender) {
-            this.sender = sender;
-        },
-        setTemplate: function(template) {
-            this.msgtemplate = template;
-        },
-        setPopulation: function(population) {
-            this.population = population;
-        },
         sendTest: function(e) {
             if(e) { e.preventDefault(); e.stopPropagation(); }
-            this.tested = true;
-            this.render();
-        },
-        hasTested: function() {
-            return this.tested;
+            this.hasTested = true;
         },
     });
 });

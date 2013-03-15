@@ -146,7 +146,7 @@ function getPersona()
         'senderEmail'         => 'ticklejw@appstate.edu',
         'permission'    => array(
             'spaminate'     => true,
-            'changePersona' => false,
+            'changePersona' => true,
             'changeName'    => true,
         )
     );
