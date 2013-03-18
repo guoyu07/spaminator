@@ -4,7 +4,7 @@ define([
     'spaminator/view/abstract-subview',
     'spaminator/review/view/member',
     'text!spaminator/template/review.html',
-], function(_, Backbone, AbstractSubview, ReviewTemplate, MemberView) {
+], function(_, Backbone, AbstractSubview, MemberView, ReviewTemplate) {
     return AbstractSubview.extend({
         template: _.template(ReviewTemplate),
         hasTested: false,
@@ -22,8 +22,9 @@ define([
                 subject: subject ? subject : 'No Template Selected!',
             }));
 
-                /*            this.$population = $('.review-population', this.$el);
+            this.$population = $('.review-population', this.$el);
             var population = this.persona.get('selectedPopulation');
+            console.log(population.toJSON());
             if(population) {
                 this.$population.empty();
                 population.each(function(model) {
@@ -33,7 +34,7 @@ define([
                     view.on('click', this.recipientClicked, this);
                     this.$population.append(view.render().el);
                 }, this);
-            }*/
+            }
 
             this.$unsent = $('.review-unsent-email', this.$el);
             this.initNext();

@@ -13,5 +13,8 @@ define([
             'email':      '',
             'error':      '',
         },
+        formatRecipient: function() {
+            return this.get('firstName') + ' ' + this.get('lastName') + ' <' + this.get('email') + '>';
+        },
     });
 });

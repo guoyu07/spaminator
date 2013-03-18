@@ -1,6 +1,10 @@
 define([
-], function() {
+    'underscore',
+    'backbone',
+    'text!spaminator/review/template/member.html',
+], function(_, Backbone, MemberTemplate) {
     return Backbone.View.extend({
+        template: _.template(MemberTemplate),
         el: 'li',
         initialize: function() {
             this.listenTo(this.model, 'change',  this.render);
@@ -8,8 +12,9 @@ define([
             this.listenTo(this.model, 'destroy', this.remove);
         },
         render: function() {
-            this.$el.text(this.model.formatRecipient());
-            this.addClass('population-member');
+//            console.log(this.model);
+            this.template(this.model.toJSON());
+            this.$el.addClass('population-member');
             return this;
         },
     });

@@ -108,6 +108,7 @@ define([
                         me.switchTo.call(me, viewName);
                     },
                     function(error) {
+                        console.log(error);
                         console.log('Could not load view ' + viewName + ': ' + error);
                     }
                 );

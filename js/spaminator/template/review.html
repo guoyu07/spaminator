@@ -21,8 +21,46 @@
         <ul class="nav nav-list review-population"></ul>
       </div>
       <div class="span6">
-        <h2 class="text-error">Test Email</h2>
-        <p>Please send a test message to yourself by filling in this form.</p>
+        <div class="well">
+          <h2 class="text-error">Test Email</h2>
+          <form class="form-horizontal">
+            <div class="control-group">
+              <p>Please send a test message to yourself by filling in this form.  Email Address is the only required field.</p>
+              <label class="control-label" for="testEmail">Email Address</label>
+              <div class="controls">
+                <input type="text" id="testEmail" placeholder="Test Email Address">
+              </div>
+            </div>
+            <div class="control-group">
+              <p>The following are NOT required, but may be used if they are requested from your template.</p>
+              <label class="control-label" for="testBannerID">Banner ID</label>
+              <div class="controls">
+                <input type="text" id="testBannerID" placeholder="Test Banner ID">
+              </div>
+              <label class="control-label" for="testLastName">Last Name</label>
+              <div class="controls">
+                <input type="text" id="" placeholder="Test Last Name">
+              </div>
+              <label class="control-label" for="testFirstName">First Name</label>
+              <div class="controls">
+                <input type="text" id="" placeholder="Test First Name">
+              </div>
+              <label class="control-label" for="testMiddleName">Middle Name</label>
+              <div class="controls">
+                <input type="text" id="" placeholder="Test Middle Name">
+              </div>
+              <label class="control-label" for="testUsername">Username</label>
+              <div class="controls">
+                <input type="text" id="" placeholder="Test Username">
+              </div>
+            </div>
+            <div class="control-group">
+              <div class="controls">
+                <button type="submit" class="btn">Send Test Email</button>
+              </div>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </body>
