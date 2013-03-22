@@ -187,7 +187,6 @@ function makeUpValues($bannerid)
     $email = "$bannerid@tux.appstate.edu";
 
     return makeMember(
-        $email,
         $bannerid,
         'testFirst',
         'testMiddle',

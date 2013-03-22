@@ -12,17 +12,12 @@ define([
         menuTemplate: _.template(MenuTemplate),
         loadingTemplate: _.template(LoadingTemplate),
         persona: null,
-        programData: {
-            'selectedPopulation': null,
-            'selectedTemplate': null,
-        },
         events: {
             'click .spaminator-link': 'switchClicked',
         },
         initialize: function(options) {
             // Initialize Persona
-            var me = this;
-            window.persona = this.persona = new Persona();
+            persona = this.persona = new Persona();
             this.persona.url = Config.personaSource;
             this.persona.fetch();
 

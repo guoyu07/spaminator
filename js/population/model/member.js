@@ -4,17 +4,14 @@ define([
     return Backbone.Model.extend({
         defaults: {
             'bannerId':   '',
-            'firstName':  '',
-            'middleName': '',
-            'lastName':   '',
+            'firstname':  '',
+            'middlename': '',
+            'lastname':   '',
             'prefix':     '',
             'suffix':     '',
             'username':   '',
             'email':      '',
             'error':      '',
-        },
-        formatRecipient: function() {
-            return this.get('firstName') + ' ' + this.get('lastName') + ' <' + this.get('email') + '>';
         },
     });
 });

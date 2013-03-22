@@ -24,15 +24,14 @@ define([
 
             this.$population = $('.review-population', this.$el);
             var population = this.persona.get('selectedPopulation');
-            console.log(population.toJSON());
             if(population) {
                 this.$population.empty();
                 population.each(function(model) {
                     var view = new MemberView({
                         model: model,
                     });
-                    view.on('click', this.recipientClicked, this);
                     this.$population.append(view.render().el);
+                    view.on('select', this.renderEmail, this);
                 }, this);
             }
 
@@ -63,6 +62,8 @@ define([
         sendTest: function(e) {
             if(e) { e.preventDefault(); e.stopPropagation(); }
             this.hasTested = true;
+        },
+        renderEmail: function(e) {
         },
     });
 });
