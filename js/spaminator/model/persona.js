@@ -1,19 +1,20 @@
 define([
     'backbone',
-], function(Backbone) {
+    'spaminator/config',
+], function(Backbone, Config) {
     return Backbone.Model.extend({
+        urlRoot: Config.personaSource,
         defaults: {
             loaded:        false,
             authenticated: false,
-            senderName:    '',
-            senderEmail:   '',
+            firstname:     '',
+            lastname:      '',
+            email:         '',
             permission: {
                 spaminate:     true,
                 changePersona: false,
                 changeName:    false,
             },
-            selectedPopulation: null,
-            selectedTemplate:   null,
         },
         parse: function(response, options) {
             this.set('loaded', true);

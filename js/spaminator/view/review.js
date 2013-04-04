@@ -7,14 +7,16 @@ define([
 ], function(_, Backbone, AbstractSubview, MemberView, ReviewTemplate) {
     return AbstractSubview.extend({
         template: _.template(ReviewTemplate),
-        hasTested: false,
         render: function() {
-            var from = this.persona.get('senderName') + " <" + this.persona.get('senderEmail') + ">";
+            var from = false;
+            if(this.spamination.get('senderName') && this.spamination.get('senderEmail')) {
+                from = this.spamination.get('senderName') + " <" + this.spamination.get('senderEmail') + ">";
+            }
 
             var subject = null;
-            var template = this.persona.get('selectedTemplate');
+            var template = this.spamination.get('templateDataSource');
             if(template) {
-                subject = template.get('title');
+                subject = template;
             }
 
             this.$el.html(this.template({
@@ -23,16 +25,17 @@ define([
             }));
 
             this.$population = $('.review-population', this.$el);
-            var population = this.persona.get('selectedPopulation');
+            var population = this.spamination.get('populationDataSource');
             if(population) {
-                this.$population.empty();
+                this.$population.append(population);
+                /*                this.$population.empty();
                 population.each(function(model) {
                     var view = new MemberView({
                         model: model,
                     });
                     this.$population.append(view.render().el);
                     view.on('select', this.renderEmail, this);
-                }, this);
+                }, this);*/
             }
 
             this.$unsent = $('.review-unsent-email', this.$el);
@@ -41,16 +44,16 @@ define([
         updateNext: function() {
             var next = $('.spaminator-next', this.$el);
 
-            var population = this.persona.get('selectedPopulation');
-            if(!population || population.length < 1) {
+            var population = this.spamination.get('selectedPopulation');
+            if(!population) {
                 this.disableNext('Missing Population', 'Your recipient population is empty.  Please select "population" from the menu at the top of the page to add members.');
             }
 
-            if(!this.persona.get('selectedTemplate')) {
+            if(!this.spamination.get('selectedTemplate')) {
                 this.disableNext('Missing Template', 'You did not select a template.  Please click "template" from the menu at the top of the page to select or create a template.');
             }
 
-            if(!this.hasTested) {
+            if(!this.spamination.hasTested) {
                 this.disableNext('Untested Spamination', 'Please send a test email to yourself first.');
                 return;
             } else {
@@ -61,7 +64,7 @@ define([
         },
         sendTest: function(e) {
             if(e) { e.preventDefault(); e.stopPropagation(); }
-            this.hasTested = true;
+            this.spamination.hasTested = true;
         },
         renderEmail: function(e) {
         },

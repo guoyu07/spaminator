@@ -142,8 +142,9 @@ function getPersona()
 {
     return array(
         'authenticated' => true,
-        'senderName'          => 'Jeff Tickle',
-        'senderEmail'         => 'ticklejw@appstate.edu',
+        'firstname'     => 'Jeff',
+        'lastname'      => 'Tickle',
+        'email'         => 'ticklejw@appstate.edu',
         'permission'    => array(
             'spaminate'     => true,
             'changePersona' => true,

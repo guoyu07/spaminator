@@ -59,6 +59,10 @@ define([
     'bootstrap',
 ], function(_, Backbone) {
     return Backbone.View.extend({
+        initialize: function(persona, spamination) {
+            this.persona = persona;
+            this.spamination = spamination;
+        },
         render: function() {
             this.$el.html(this.template());
             if(this.subview) this.renderSubview();
@@ -75,10 +79,14 @@ define([
             this.updateNext();
         },
         enableNext: function() {
+            if(!this.$next) return;
+
             this.$next.removeClass('disabled').addClass('btn-success');
             this.$next.popover('destroy');
         },
         disableNext: function(title, content) {
+            if(!this.$next) return;
+
             this.$next.addClass('disabled').removeClass('btn-success');
 
             this.$next.popover({
@@ -87,8 +95,5 @@ define([
                 content: content,
             });
         },
-        setPersona: function(persona) {
-            this.persona = persona;
-        }
     });
 });

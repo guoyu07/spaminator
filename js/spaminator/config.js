@@ -5,5 +5,6 @@ define([], function() {
             instance: null,
         },
         personaSource: 'data/index.php/persona',
+        spaminationSource: 'data/index.php/spamination',
     }
 });

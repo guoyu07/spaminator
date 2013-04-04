@@ -6,6 +6,11 @@ define([
 ], function(_, Backbone, AbstractSubview, WelcomeTemplate) {
     return AbstractSubview.extend({
         template: _.template(WelcomeTemplate),
+        initialize: function(persona, spamination) {
+            AbstractSubview.prototype.initialize.apply(this, arguments);
+
+            this.listenTo(this.persona, 'sync', this.render);
+        },
         render: function() {
             this.$el.html(this.template());
 
@@ -28,12 +33,6 @@ define([
         },
         updateNext: function() {
             this.enableNext();
-        },
-        setPersona: function(persona) {
-            this.persona = persona;
-
-            this.listenTo(this.persona, 'sync', this.render);
-            this.render();
         },
     });
 });
