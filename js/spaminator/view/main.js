@@ -3,23 +3,24 @@ define([
     'backbone',
     'spaminator/config',
     'spaminator/model/persona',
+    'spaminator/model/spamination',
     'text!spaminator/template/layout.html',
     'text!spaminator/template/menu.html',
     'text!spaminator/template/loading.html',
-], function(_, Backbone, Config, Persona, LayoutTemplate, MenuTemplate, LoadingTemplate) {
+], function(_, Backbone, Config, Persona, Spamination, LayoutTemplate, MenuTemplate, LoadingTemplate) {
     return Backbone.View.extend({
         template: _.template(LayoutTemplate),
         menuTemplate: _.template(MenuTemplate),
         loadingTemplate: _.template(LoadingTemplate),
-        persona: null,
         events: {
             'click .spaminator-link': 'switchClicked',
         },
         initialize: function(options) {
             // Initialize Persona
-            persona = this.persona = new Persona();
-            this.persona.url = Config.personaSource;
-            this.persona.fetch();
+            this.persona = new Persona();
+
+            // Initialize Spamination
+            this.spamination = new Spamination();
 
             // Initialize Views
             this.views = {};
@@ -31,12 +32,19 @@ define([
 
             this.render();
 
-            // Switch to Initial View
-            if(options.initialView) {
-                this.switchTo(options.initialView);
-            } else {
-                this.switchTo(first);
-            }
+            // Things that have to happen only after the Persona is loaded
+            var me = this;
+            this.persona.fetch({success: function() {
+                me.spamination.set('senderName', me.persona.get('firstname') + ' ' + me.persona.get('lastname'));
+                me.spamination.set('senderEmail', me.persona.get('email'));
+
+                // Switch to Initial View
+                if(options.initialView) {
+                    me.switchTo(options.initialView);
+                } else {
+                    me.switchTo(first);
+                }
+            }});
         },
         render: function() {
             this.$el.html(this.template());
@@ -98,8 +106,7 @@ define([
                 this.$content.html(this.loadingTemplate({title: viewName}));
                 require([require, this.views[viewName].require],
                     function(require, TheView) {
-                        me.views[viewName].instance = new TheView();
-                        me.views[viewName].instance.setPersona(me.persona);
+                        me.views[viewName].instance = new TheView(me.persona, me.spamination);
                         me.switchTo.call(me, viewName);
                     },
                     function(error) {

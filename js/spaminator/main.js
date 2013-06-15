@@ -14,7 +14,7 @@ define([
                 },
                 'template': {
                     'require': 'spaminator/view/template',
-                    'hideUntilLoad': true,
+//                    'hideUntilLoad': true,
                 },
                 'sender': {
                     'require': 'spaminator/view/sender',

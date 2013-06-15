@@ -8,6 +8,8 @@ define([
     return AbstractSubview.extend({
         template: _.template(TemplateTemplate),
         initialize: function() {
+            AbstractSubview.prototype.initialize.apply(this, arguments);
+
             this.subview = new TemplateView();
 
             this.listenTo(this.subview, 'selected', this.updateNext);
@@ -20,7 +22,7 @@ define([
                 return;
             }
             if(template.get('title').length > 0 && template.get('content').length > 0) {
-                this.persona.set('selectedTemplate', template);
+                this.spamination.set('templateDataSource', template.url());
                 this.enableNext();
             } else {
                 this.disableNext('Incomplete Template', 'Please enter a complete template before proceeding.');

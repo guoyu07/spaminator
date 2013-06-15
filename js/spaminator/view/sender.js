@@ -11,7 +11,11 @@ define([
             'keyup #senderEmail': 'updateNext',
         },
         render: function() {
-            this.$el.html(this.template(this.persona.toJSON()));
+            this.$el.html(this.template({
+                permission: this.persona.get('permission'),
+                senderName: this.spamination.get('senderName'),
+                senderEmail: this.spamination.get('senderEmail'),
+            }));
 
             this.$name  = $('input#senderName',  this.$el);
             this.$email = $('input#senderEmail', this.$el);
@@ -34,7 +38,7 @@ define([
                     .removeClass('error')
                     .addClass('success');
                 this.$nameHelp.empty();
-                if(exists) this.persona.set('name', val);
+                if(exists) this.spamination.set('senderName', val);
             } else {
                 this.$name.parents('.control-group')
                     .removeClass('success')
@@ -62,7 +66,7 @@ define([
                     .removeClass('error')
                     .addClass('success');
                 this.$emailHelp.empty();
-                if(exists) this.persona.set('email', val);
+                if(exists) this.spamination.set('senderEmail', val);
             } else {
                 this.$email.parents('.control-group')
                     .removeClass('success')

@@ -9,6 +9,7 @@ require.config({
         'text':       'libs/require/text',
         'ckeditor':   'libs/ckeditor/ckeditor',
         'libess':     'libs/ess/libess',
+        'marionette': 'libs/backbone.marionette',
     },
 
     shim: {
@@ -16,6 +17,10 @@ require.config({
         'backbone': {
             deps: ["underscore", "jquery"],
             exports: "Backbone",
+        },
+        'marionette': {
+            deps: ["backbone"],
+            exports: "Backbone.Marionette",
         },
         'jquery-ui': {
             deps: ["jquery"],

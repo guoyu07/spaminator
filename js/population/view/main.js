@@ -15,12 +15,6 @@ define([
         },
         initialize: function() {
             this.population = new Population();
-        },
-        render: function() {
-            this.$el.html(this.template());
-
-            this.$memberlist      = $('.population-member-list', this.$el);
-            this.$memberlistempty = $('.population-member-list-empty', this.$el);
 
             this.population.collection.on('add', this.addOne, this);
             this.population.collection.on('reset', this.render, this);
@@ -28,6 +22,14 @@ define([
 
             this.population.collection.on('add', this.changeEmpty, this);
             this.population.collection.on('destroy', this.changeEmpty, this);
+        },
+        render: function() {
+            this.$el.html(this.template());
+
+            this.$memberlist      = $('.population-member-list', this.$el);
+            this.$memberlistempty = $('.population-member-list-empty', this.$el);
+
+            this.trigger('popChange', this.population);
 
             this.addAll();
         },
@@ -38,7 +40,7 @@ define([
                 this.$memberlistempty.show();
             }
 
-            this.trigger('popChange', this.population.collection);
+            this.trigger('popChange', this.population);
         },
         addOne: function(model) {
             var el = $('<tr>');
@@ -50,7 +52,7 @@ define([
             });
             view.render();
 
-            this.trigger('popChange', this.population.collection);
+            this.trigger('popChange', this.population);
         },
         addAll: function() {
             $('.population-member-list', this.$el).empty();
@@ -64,8 +66,8 @@ define([
             });
             popup.render();
         },
-        getCollection: function() {
-            return this.population.collection;
+        getPopulation: function() {
+            return this.population;
         },
     });
 });
