@@ -9,7 +9,6 @@ require.config({
         'text':       'libs/require/text',
         'ckeditor':   'libs/ckeditor/ckeditor',
         'libess':     'libs/ess/libess',
-        'spin':       'libs/spin',
     },
 
     shim: {
