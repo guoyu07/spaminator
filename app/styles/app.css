@@ -1,0 +1,42 @@
+#head-logo {
+    text-align: center;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    padding: 2em;
+    background: #FFF;
+}
+
+#head-logo img {
+    margin: auto;
+}
+
+#appstate-bar {
+    background: #000;
+    color: #FFF;
+    height: 4em;
+    line-height: 4em;
+    margin: 0 0 1em 0;
+}
+
+.template-item-actions {
+    line-height: 3em;
+}
+
+.review-message-envelope strong {
+    display: block;
+    float: left;
+    width: 75px;
+    text-align: right;
+    margin-right: 0.5em;
+}
+
+#footer {
+    text-align: center;
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+    background: #FFF;
+}

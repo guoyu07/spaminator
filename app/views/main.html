@@ -1,9 +1,13 @@
-<div class="hero-unit">
-  <h1>'Allo, 'Allo!</h1>
-  <p>You now have</p>
-  <ul>
-      <li ng-repeat="thing in awesomeThings">{{thing}}</li>
-  </ul>
-  <p>installed.</p>
-  <h3>Enjoy coding! - Yeoman</h3>
+<div class="hero-unit span12">
+  <h1>Spaminator</h1>
+  <p class="lead">Send emails to lots of people the right way.</p>
+  <p class="text-error spaminator-welcome-unauthenticated" ng-show="!user.isLogged">
+    You have not authenticated. <a class="btn btn-large btn-primary" href="#"><i class="icon-white icon-user"></i> Log In with Shibboleth</a>
+  </p>
+  <div class="alert alert-error spaminator-welcome-unauthorized" ng-show="user.isLogged && !user.isAllowed">
+    <p>You have not been granted permission to use the Spaminator. Please <a href="http://ess.appstate.edu/request-support">contact ESS</a> to gain access.</p>
+  </div>
+  <p class="spaminator-welcome-authorized" ng-show="user.isLogged && user.isAllowed">
+    <a class="btn btn-large btn-success spaminator-next spaminator-link" href="/#/population">Get Started <i class="icon-arrow-right icon-white"></i></a>
+  </p>
 </div>

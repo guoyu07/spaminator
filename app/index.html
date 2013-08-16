@@ -6,17 +6,19 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title></title>
+    <title>ESS Spaminator</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
         <!-- build:css({.tmp,app}) styles/main.css -->
         <link rel="stylesheet" href="styles/bootstrap.css">
-        <link rel="stylesheet" href="styles/main.css">
+        <!--<link rel="stylesheet" href="styles/main.css">-->
+        <link rel="stylesheet" href="styles/app.css">
+        <link rel="stylesheet" href="styles/misc.css">
         <!-- endbuild -->
 </head>
-  <body ng-app="spaminatorApp">
+  <body ng-app="spaminatorApp" ng-controller="AppCtrl">
     <!--[if lt IE 7]>
       <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
     <![endif]-->
@@ -27,7 +29,42 @@
     <![endif]-->
 
     <!-- Add your site or application content here -->
-    <div class="container" ng-view=""></div>
+    <!-- Header -->
+    <div id="appstate-bar">
+      <div class="container">
+        <a href="http://www.appstate.edu"><img src="images/appstate-logo.png"></a>
+        <div class="pull-right">
+          <p>Welcome, {{user.fname}} {{user.lname}} | <a href="">Logout</a></p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="navbar span12 center">
+      <div class="navbar-inner">
+        <a ng-show="true" class="brand" href="/#/">Spaminator</a>
+        <ul class="nav">
+          <li><a ng-show="true" class="spaminator-link" href="/#/population">Population</a></li>
+          <li><a ng-show="true" class="spaminator-link" href="/#/template">Template</a></li>
+          <li><a ng-show="true" class="spaminator-link" href="/#/sender">Sender</a></li>
+          <li><a ng-show="true" class="spaminator-link" href="/#/preview">Preview</a></li>
+          <li><a ng-show="true" class="spaminator-link" href="/#/send">Send</a></li>
+          <li><a ng-show="true" class="spaminator-link" href="/#/report">Report</a></li>
+        </ul>
+        <ul class="nav pull-right">
+          <li><a ng-show="true" class="spaminator-link" href="/#/history">History</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row-fluid" ng-view></div>
+    </div>
+
+    <!-- Footer -->
+    <div id="footer">
+      <p><a href="http://ess.appstate.edu/webmaster">Webmaster</a> &mdash; <a href="http://www.web.appstate.edu/disclaimer.html">Disclaimer</a> &mdash; <a href="http://edc.appstate.edu/equity/EOpolicy.html">Equal Opportunity Policy</a></p>
+      <p>Spaminator &copy; 2013 Appalachian State University &mdash; The Office of <a href="http://ess.appstate.edu/">Electronic Student Services</a> &mdash; <a href="http://www.gnu.org/licenses/gpl.html">GNU GPL v3</a> &mdash; <a href="http://github.com/AppStateESS/spaminator">GitHub</a></p>
+    </div>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
     <script>
@@ -65,6 +102,11 @@
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
         <script src="scripts/app.js"></script>
         <script src="scripts/controllers/main.js"></script>
+        <script src="scripts/controllers/App.js"></script>
+        <script src="scripts/controllers/Population.js"></script>
+        <script src="scripts/controllers/Template.js"></script>
+        <script src="scripts/controllers/Sender.js"></script>
+        <script src="scripts/services/UserAuth.js"></script>
         <!-- endbuild -->
 </body>
 </html>
