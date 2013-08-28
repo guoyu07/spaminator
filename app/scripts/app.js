@@ -8,32 +8,32 @@ angular.module('spaminatorApp', [])
         controller: 'MainCtrl'
       })
       .when('/population', {
-          templateUrl: 'views/population.html',
-          controller: 'PopulationCtrl'
+        templateUrl: 'views/population.html',
+        controller: 'PopulationCtrl'
       })
       .when('/template', {
-          templateUrl: 'views/template.html',
-          controller: 'TemplateCtrl'
+        templateUrl: 'views/template.html',
+        controller: 'TemplateCtrl'
       })
       .when('/sender', {
-          templateUrl: 'views/sender.html',
-          controller: 'SenderCtrl'
+        templateUrl: 'views/sender.html',
+        controller: 'SenderCtrl'
       })
       .when('/preview', {
-          templateUrl: 'views/preview.html',
-          controller: 'PreviewCtrl'
+        templateUrl: 'views/preview.html',
+        controller: 'PreviewCtrl'
       })
       .when('/send', {
-          templateUrl: 'views/send.html',
-          controller: 'SendCtrl'
+        templateUrl: 'views/send.html',
+        controller: 'SendCtrl'
       })
       .when('/report', {
-          templateUrl: 'views/report.html',
-          controller: 'ReportCtrl'
+        templateUrl: 'views/report.html',
+        controller: 'ReportCtrl'
       })
       .when('/history', {
-          templateUrl: 'views/history.html',
-          controller: 'HistoryCtrl'
+        templateUrl: 'views/history.html',
+        controller: 'HistoryCtrl'
       })
       .otherwise({
         redirectTo: '/'
