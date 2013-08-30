@@ -1,7 +1,29 @@
 <div class="span12">
-  <p class="pull-right">
-    <a href="/#/template" class="btn btn-large spaminator-next spaminator-link" ng-show="true">Step 2: Message Template <i class="icon-arrow-right icon-white"></i></a>
-  </p>
-  <h1>Step 1: Create a Population</h1>
-  <p class="lead">Import population members by Banner ID, Username (not yet), Email Address (coming soon), or Card Swipe (yeah, I'll get right on that).</p>
+  <div class="row-fluid">
+    <p class="pull-right">
+      <a href="/#/template" class="btn btn-large spaminator-next spaminator-link" ng-show="allowNext()">Step 2: Message Template <i class="icon-arrow-right"></i></a>
+    </p>
+    <h1>Step 1: Create a Population</h1>
+    <p class="lead">Import population members by Banner ID, Username (not yet), Email Address (coming soon), or Card Swipe (yeah, I'll get right on that).</p>
+    <p class="text-center"><a class="btn btn-large btn-primary population-add">Add People to Population <i class="icon-plus icon-white"></i></a></p>
+  </div>
+  <div class="row-fluid">
+    <table class="table table-bordered table-condensed">
+      <tr>
+        <th></th>
+        <th>Banner ID</th>
+        <th>Last Name</th>
+        <th>First Name</th>
+        <th>Middle Name</th>
+        <th>Prefix</th>
+        <th>Suffix</th>
+        <th>Username</th>
+        <th>Email</th>
+      </tr>
+      <tr ng-repeat="person in population">
+        <td></td>
+        <td ng-repeat="datum in person">{{datum}}</td>
+      </tr>
+    </table>
+  </div>
 </div>
