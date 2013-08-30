@@ -34,7 +34,7 @@
       <div class="container">
         <a href="http://www.appstate.edu"><img src="images/appstate-logo.png"></a>
         <div class="pull-right">
-          <p>Welcome, {{user.fname}} {{user.lname}} | <a href="">Logout</a></p>
+          <p>Welcome, {{user.getFullName()}} | <a href="">Logout</a></p>
         </div>
       </div>
     </div>
@@ -44,15 +44,15 @@
       <div class="navbar-inner">
         <a ng-show="true" class="brand" href="/#/">Spaminator</a>
         <ul class="nav">
-          <li><a ng-show="true" class="spaminator-link" href="/#/population">Population</a></li>
-          <li><a ng-show="true" class="spaminator-link" href="/#/template">Template</a></li>
-          <li><a ng-show="true" class="spaminator-link" href="/#/sender">Sender</a></li>
-          <li><a ng-show="true" class="spaminator-link" href="/#/preview">Preview</a></li>
-          <li><a ng-show="true" class="spaminator-link" href="/#/send">Send</a></li>
-          <li><a ng-show="true" class="spaminator-link" href="/#/report">Report</a></li>
+          <li ng-class="{active : path == '/population'}"><a ng-show="view.isViewable('Population')" class="spaminator-link" href="/#/population">Population</a></li>
+          <li ng-class="{active : path == '/template'}"><a ng-show="view.isViewable('Template')" class="spaminator-link" href="/#/template">Template</a></li>
+          <li ng-class="{active : path == '/sender'}"><a ng-show="view.isViewable('Sender')" class="spaminator-link" href="/#/sender">Sender</a></li>
+          <li ng-class="{active : path == '/preview'}"><a ng-show="view.isViewable('Preview')" class="spaminator-link" href="/#/preview">Preview</a></li>
+          <li ng-class="{active : path == '/send'}"><a ng-show="view.isViewable('Send')" class="spaminator-link" href="/#/send">Send</a></li>
+          <li ng-class="{active : path == '/report'}"><a ng-show="view.isViewable('Report')" class="spaminator-link" href="/#/report">Report</a></li>
         </ul>
         <ul class="nav pull-right">
-          <li><a ng-show="true" class="spaminator-link" href="/#/history">History</a></li>
+          <li ng-class="{active : path == '/history'}"><a ng-show="view.isViewable('History')" class="spaminator-link" href="/#/history">History</a></li>
         </ul>
       </div>
     </div>
