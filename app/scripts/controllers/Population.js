@@ -18,8 +18,8 @@ angular.module('spaminatorApp')
                          ["000000000","McTester","Test","Reginald","Sir","III","mctestertr","mctestertr@appstate.edu"]];
 
     
-    var data = "900458187 900458182";
-    console.log($location.path());
+    var data = "900458187\t900294976\n900325006";
+    //console.log($location.path());
     
     //$http({method: 'POST', url:"http://localhost:9000/scripts/getPopulation.php"})
     $http.post("scripts/getPopulation.php", data)
@@ -29,8 +29,13 @@ angular.module('spaminatorApp')
             console.log(status);
             console.log(headers);
             console.log(config);
-            alert("SUCCESS");
+            
             $scope.population.push(["123456789","Potter","Harry","James","","","potterhj","potterhj@hogwarts.edu"]);
+            data.forEach(function(entry) {
+                //console.log(entry);
+                $scope.population.push([entry["id"],entry["lname"],entry["fname"],"","","","",""]);
+                //TODO: need a better way to fill in missing info
+            });
         })
         .error(function(data, status, headers, config) {
             console.log("ERROR--------------------------------");
