@@ -1,48 +1,54 @@
 'use strict';
 
 angular.module('spaminatorApp')
-  .controller('PopulationCtrl', function ($scope, UserView, $http, $location) {
-    $scope.awesomeThings = [
-      'HTML5 Boilerplate',
-      'AngularJS',
-      'Karma'
-    ];
+  .controller('PopulationCtrl', function ($scope, UserView, $http) {
+    // Set the Population tab viewable
+    UserView.setViewable("Population");
 
-    //UserView.setViewable("Template");
+    // Population array
+    $scope.population = [];
+
+    // Determine if the next step should be visible
     $scope.allowNext = function() {
         return $scope.population.length > 0 ? true : false;
     }
 
-    // Test data
-    $scope.population = [["900458187","Coley","Christopher","Jacob","","","coleycj","coleycj@appstate.edu"],
-                         ["000000000","McTester","Test","Reginald","Sir","III","mctestertr","mctestertr@appstate.edu"]];
+    // Remove a member from the population array
+    $scope.remove = function(index) {
+        $scope.population.splice(index,1);
+    }
 
+    // Submit population modal 
+    $scope.popEntrySubmit = function(memberInfo) { 
+
+        if (memberInfo) {
+            console.log("Doing it");
+            //$http.post("scripts/getPopulation.php", memberInfo)     // Replace the next line with this line for production
+            $http.post("http://blackfoot.appstate.edu/~chris/spaminator/app/scripts/getPopulation.php", memberInfo)  // Remove in production
+                .success(function(popData, status, headers, config) {
+                    // Push each person into the population array
+                    popData.forEach(function(entry) {
+                        $scope.population.push([entry["id"],entry["lname"],entry["fname"],"","","","",""]);
+                        //TODO: need a better way to fill in missing info
+                    });
+
+                    // Empty the modal
+                    $scope.popEntryData="";
+                })
+                .error(function(popData, status, headers, config) {
+                    console.log("ERROR--------------------------------");
+                    console.log(status);
+                    console.log(config);
+                    console.log(popData);
+                });
+        }
+        // Close the modal whether success, error, or empty input
+        $('#add-population-modal').modal('hide');
+    };
     
-    var data = "900458187\t900294976\n900325006";
-    //console.log($location.path());
-    
-    //$http({method: 'POST', url:"http://localhost:9000/scripts/getPopulation.php"})
-    $http.post("scripts/getPopulation.php", data)
-        .success(function(data, status, headers, config) {
-            console.log("SUCCESS------------------------------");
-            console.log(data);
-            console.log(status);
-            console.log(headers);
-            console.log(config);
-            
-            $scope.population.push(["123456789","Potter","Harry","James","","","potterhj","potterhj@hogwarts.edu"]);
-            data.forEach(function(entry) {
-                //console.log(entry);
-                $scope.population.push([entry["id"],entry["lname"],entry["fname"],"","","","",""]);
-                //TODO: need a better way to fill in missing info
-            });
-        })
-        .error(function(data, status, headers, config) {
-            console.log("ERROR--------------------------------");
-            console.log(data);
-            console.log(status);
-            console.log(headers);
-            console.log(config);
-            //alert("FAILURE" + "\nData: " + data + "\nStatus: " + status);
-        });
+    // Cancel population modal, and clear the <textarea>
+    $scope.popEntryCancel = function() {
+        $scope.popEntryData="";
+        $('#add-population-modal').modal('hide');
+    };
   });
