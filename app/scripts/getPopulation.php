@@ -3,7 +3,8 @@
 // so you have to get it from php://input
 $input = file_get_contents("php://input");
 
-$data = preg_split("/[\s,]+/", $input, NULL, PREG_SPLIT_NO_EMPTY);
+// Split input on . , ; : white space
+$data = preg_split("/[\s.,;:]+/", $input, NULL, PREG_SPLIT_NO_EMPTY);
 $array = implode(",", $data);
 
 $db = mysqli_connect("localhost", "chris", "chris", "chris2");
