@@ -1,7 +1,46 @@
 <div class="span12">
-  <p class="pull-right">
-    <a href="/#/sender" class="btn btn-large spaminator-next spaminator-link" ng-show="view.isViewable('Sender')">Step 3: Select Sender <i class="icon-arrow-right"></i></a>
-  </p>
-  <h1>Step 2: Select a Message Template</h1>
-  <p class="lead">Select a message template from the list below, or create a new one.</p>
+  <div class="row-fluid">
+    <p class="pull-right">
+      <a href="/#/sender" class="btn btn-large spaminator-next spaminator-link" ng-show="view.isViewable('Sender')">Step 3: Select Sender <i class="icon-arrow-right"></i></a>
+    </p>
+    <h1>Step 2: Select a Message Template</h1>
+    <p class="lead">Select a message template from the list below, or create a new one.</p>
+  </div>
+  <hr>
+  <div class="row-fluid">
+    <div class="span3 text-center">
+      <p><a class="btn" id="template-new" ng-click="newTemplate()"><i class="icon-plus"></i> New Template</a></p>
+      <div class="well" ng-show="editTemplate">
+        <div class="pullright">
+          <a class="btn btn-small pull-right"><i class="icon-trash"></i></a>
+        </div>
+        <div>
+          <span>{{activeTemplate.name}}</span>
+        </div>
+      </div>
+      <ul class="nav nav-list well" id="template-list">
+        <li ng-show="templatesLoaded && !templates.length"><p>There are no templates yet.</p></li>
+        <li class="nav-header" ng-show="!templatesLoaded">
+          <h5>Loading Templates...</h5>
+          <div class="progress progress-striped active" id="template-progress">
+            <div class="bar" style="width:100%;"></div>
+          </div>
+        </li>
+        <li ng-repeat="template in templates"><a class="btn-link" ng-click="loadTemplate($index)">{{template.name}}</a></li>
+      </ul>
+    </div>
+    <div class="span9" id="template-view">
+      <div>
+        <a class="btn pull-right">
+          <span class="template-editor-unsaved"><i class="icon-upload"></i> Unsaved</span>
+          <span class="template-editor-saved"><i class="icon-ok"></i> Saved</span>
+          <span class="template-editor-saving"><i class="icon-refresh"></i> Saving</span>
+        </a>
+        <div class="input-prepend">
+          <span class="add-on">Subject</span>
+          <input class="input-xlarge" id="template-input-subject" type="text", placeholder="Subject Line">
+        </div>
+      </div> 
+    </div>
+  </div>
 </div>
